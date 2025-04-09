@@ -8,7 +8,7 @@ import Darwin from '../components/Darwin'
 
 // Fetch the slugs for all articles
 export async function getStaticPaths() {
-    const res = await fetch('https://api-barbarpotato.vercel.app/labs?index=1');
+    const res = await fetch('https://api-barbarpotato.vercel.app/labs?index=6b86b273ff34f');
 
     if (!res.ok) {
         console.error('Failed to fetch articles:', res.statusText);
