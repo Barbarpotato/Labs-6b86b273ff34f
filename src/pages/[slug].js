@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import { MdSupportAgent } from "react-icons/md";
-import { Box, Button, Center, Heading, Image, useBreakpointValue, useDisclosure } from "@chakra-ui/react";
-import { useEffect, useRef } from 'react';
+import { Box, Button, Center, Heading, Image, useDisclosure } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from 'react';
 
 // Darwin component
-import Darwin from '../components/Darwin'
+import Darwin from '../components/Darwin';
 
 // Fetch the slugs for all articles
 export async function getStaticPaths() {
@@ -19,7 +19,7 @@ export async function getStaticPaths() {
     const articles = response.data;
 
     const paths = articles.map((article) => ({
-        params: { slug: article.slug }, // Ensure the slug is correct
+        params: { slug: article.slug },
     }));
 
     return { paths, fallback: false };
@@ -31,14 +31,10 @@ export async function getStaticProps({ params }) {
 
     if (!res.ok) {
         console.error('Failed to fetch article:', res.statusText);
-        return { notFound: true }; // Optionally handle missing content
+        return { notFound: true };
     }
 
-    // get the response json
     let article = await res.json();
-
-    // if found then access the data property
-    // the response data is an array so access the first index
     if (article.data) article = article.data[0];
 
     return {
@@ -49,12 +45,17 @@ export async function getStaticProps({ params }) {
 }
 
 export default function ArticlePage({ article }) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const btnRef = useRef();
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [isMobile, setIsMobile] = useState(false);
 
-    const btnRef = useRef()
-
-    const isMobile = useBreakpointValue({ base: true, md: false });
+    useEffect(() => {
+        const checkScreen = () => setIsMobile(window.innerWidth < 768);
+        checkScreen();
+        window.addEventListener("resize", checkScreen);
+        return () => window.removeEventListener("resize", checkScreen);
+    }, []);
 
     useEffect(() => {
         const applyStyles = () => {
@@ -69,7 +70,6 @@ export default function ArticlePage({ article }) {
                 const parentDiv = tag.parentNode;
                 parentDiv.style.overflowX = 'scroll';
                 parentDiv.style.marginBlock = '15px';
-
                 tag.style.backgroundColor = '#272822';
                 tag.classList.add('custom-pre');
             });
@@ -81,14 +81,12 @@ export default function ArticlePage({ article }) {
 
         applyStyles();
 
-        // Reapply styles whenever the content changes
         const observer = new MutationObserver(applyStyles);
         const contentDiv = document.querySelector('.content');
         if (contentDiv) {
             observer.observe(contentDiv, { childList: true, subtree: true });
         }
 
-        // Cleanup observer on component unmount
         return () => {
             if (contentDiv) {
                 observer.disconnect();
@@ -110,8 +108,8 @@ export default function ArticlePage({ article }) {
                 <meta property="og:type" content="article" />
                 <meta property="og:url" content={`https://barbarpotato.github.io/labs/${article.slug}`} />
             </Head>
-            <article>
 
+            <article>
                 <Box mx="auto" w={{ base: '70%', md: '35%' }}>
                     <Heading style={{ color: 'whitesmoke', fontWeight: 'bold' }}>{article?.title}</Heading>
                 </Box>
@@ -132,12 +130,22 @@ export default function ArticlePage({ article }) {
                     />
                 </Box>
 
-                {/* Mobile Button */}
+                {/* Floating Button */}
                 {isMobile ? (
                     <button
                         ref={btnRef}
                         onClick={onOpen}
                         className='chatbot-toggle-button'
+                        style={{
+                            position: 'fixed',
+                            bottom: '20px',
+                            right: '20px',
+                            zIndex: 1000,
+                            background: '#6B46C1',
+                            borderRadius: '50%',
+                            padding: '12px',
+                            border: 'none'
+                        }}
                     >
                         <MdSupportAgent size={30} color={'white'} />
                     </button>
@@ -147,6 +155,7 @@ export default function ArticlePage({ article }) {
                         position="fixed"
                         right="20px"
                         bottom="20px"
+                        zIndex={1000}
                         colorScheme="purple"
                         onClick={onOpen}
                     >
@@ -155,7 +164,6 @@ export default function ArticlePage({ article }) {
                 )}
 
                 <Darwin btnRef={btnRef} isOpen={isOpen} onOpen={onOpen} onClose={onClose} content={article?.description} />
-
             </article>
         </>
     );
