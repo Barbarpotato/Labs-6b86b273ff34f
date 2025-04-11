@@ -101,85 +101,153 @@ export default function ArticlePage({ article }) {
                 <meta property="og:url" content={`https://barbarpotato.github.io/labs/${article.slug}`} />
             </Head>
 
-            {/* TOC Component */}
-            <Box position="fixed" left="0" top="50%" transform="translateY(-50%)" zIndex="1000">
-                {!isMobile ? (
-                    <Box
+            {/* TOC Container */}
+            <div
+                style={{
+                    position: 'fixed',
+                    left: 0,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    zIndex: 1000,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    padding: '6px',
+                }}
+            >
+                {!isMobile && (
+                    <div
                         onMouseEnter={() => setTocVisible(true)}
                         onMouseLeave={() => setTocVisible(false)}
-                        bg="#1E1E1E"
-                        p={tocVisible ? 4 : 1}
-                        borderTopRightRadius="12px"
-                        borderBottomRightRadius="12px"
-                        color="white"
-                        maxH="80vh"
-                        overflowY="auto"
-                        transition="width 0.3s ease, padding 0.3s ease"
-                        w={tocVisible ? '240px' : '20px'}
-                        fontSize="0.9em"
+                        style={{
+                            backgroundColor: '#1E1E1E',
+                            padding: tocVisible ? '12px' : '4px',
+                            borderTopRightRadius: 12,
+                            borderBottomRightRadius: 12,
+                            color: 'white',
+                            maxHeight: '80vh',
+                            overflowY: 'auto',
+                            boxShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                            transition: 'width 0.3s ease, padding 0.3s ease',
+                            width: tocVisible ? '240px' : '20px',
+                            fontFamily: 'sans-serif',
+                            fontSize: '0.9em',
+                        }}
                     >
                         {!tocVisible ? (
-                            <Box writingMode="vertical-rl" transform="rotate(180deg)" cursor="pointer" fontWeight="bold" color="#aaa">
-                                TOC
-                            </Box>
+                            <div
+                                style={{
+                                    writingMode: 'vertical-rl',
+                                    transform: 'rotate(180deg)',
+                                    cursor: 'pointer',
+                                    padding: '4px 0',
+                                    color: '#aaa',
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                Table Of Contents
+                            </div>
                         ) : (
                             toc.map(item => (
-                                <Box key={item.id} ml={(item.level - 1) * 3} py={1} borderBottom="1px solid #333">
-                                    <a href={`#${item.id}`} style={{ color: '#f0f0f0', textDecoration: 'none' }}>
+                                <div
+                                    key={item.id}
+                                    style={{
+                                        marginLeft: (item.level - 1) * 12,
+                                        padding: '6px 0',
+                                        borderBottom: '1px solid #333',
+                                    }}
+                                >
+                                    <a
+                                        href={`#${item.id}`}
+                                        style={{
+                                            color: '#f0f0f0',
+                                            textDecoration: 'none',
+                                            transition: 'color 0.2s',
+                                        }}
+                                        onMouseOver={e => (e.target.style.color = '#8AB4F8')}
+                                        onMouseOut={e => (e.target.style.color = '#f0f0f0')}
+                                    >
                                         {item.text}
                                     </a>
-                                </Box>
+                                </div>
                             ))
                         )}
-                    </Box>
-                ) : (
+                    </div>
+                )}
+
+                {isMobile && (
                     <>
-                        <Button
+                        <button
                             onClick={() => setTocVisible(prev => !prev)}
-                            position="fixed"
-                            top="50%"
-                            left="8px"
-                            transform="translateY(-50%)"
-                            zIndex="1100"
-                            bg="#3F3F3F"
-                            color="white"
-                            borderRadius="12px"
-                            h="60px"
-                            w="28px"
-                            fontSize="0.7em"
-                            writingMode="vertical-rl"
-                            boxShadow="2px 2px 6px rgba(0,0,0,0.3)"
+                            style={{
+                                position: 'fixed',
+                                top: '50%',
+                                left: 8,
+                                transform: 'translateY(-50%)',
+                                zIndex: 1100,
+                                backgroundColor: '#3F3F3F',
+                                color: 'white',
+                                border: 'none',
+                                borderTopRightRadius: 12,
+                                borderBottomRightRadius: 12,
+                                padding: 8,
+                                cursor: 'pointer',
+                                writingMode: 'vertical-rl',
+                                transformOrigin: 'center',
+                                fontSize: '0.7em',
+                                height: 60,
+                                width: 28,
+                                boxShadow: '2px 2px 6px rgba(0,0,0,0.3)',
+                            }}
                         >
                             TOC
-                        </Button>
+                        </button>
+
                         {tocVisible && (
-                            <Box
-                                position="fixed"
-                                top="50%"
-                                left="42px"
-                                transform="translateY(-50%)"
-                                bg="#1E1E1E"
-                                p="12px 25px"
-                                borderRadius="8px"
-                                color="white"
-                                maxH="70vh"
-                                w="220px"
-                                overflowY="auto"
-                                boxShadow="2px 2px 8px rgba(0,0,0,0.3)"
-                                zIndex="1099"
+                            <div
+                                style={{
+                                    position: 'fixed',
+                                    top: '50%',
+                                    left: 42,
+                                    transform: 'translateY(-50%)',
+                                    backgroundColor: '#1E1E1E',
+                                    padding: '12px 25px',
+                                    borderRadius: 8,
+                                    color: 'white',
+                                    maxHeight: '70vh',
+                                    width: '220px', // ← wider
+                                    overflowY: 'auto',
+                                    boxShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                                    zIndex: 1099,
+                                }}
                             >
                                 {toc.map(item => (
-                                    <Box key={item.id} ml={(item.level - 1) * 3} py={1} borderBottom="1px solid #333">
-                                        <a href={`#${item.id}`} style={{ color: '#f0f0f0', textDecoration: 'none' }}>
+                                    <div
+                                        key={item.id}
+                                        style={{
+                                            marginLeft: (item.level - 1) * 12,
+                                            padding: '6px 0',
+                                            borderBottom: '1px solid #333',
+                                        }}
+                                    >
+                                        <a
+                                            href={`#${item.id}`}
+                                            style={{
+                                                color: '#f0f0f0',
+                                                textDecoration: 'none',
+                                                display: 'block',
+                                                fontSize: '0.9em',
+                                            }}
+                                        >
                                             {item.text}
                                         </a>
-                                    </Box>
+                                    </div>
                                 ))}
-                            </Box>
+                            </div>
                         )}
                     </>
                 )}
-            </Box>
+            </div >
 
             {/* Article Content */}
             <article>
