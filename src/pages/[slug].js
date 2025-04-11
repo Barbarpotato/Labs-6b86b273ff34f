@@ -125,9 +125,10 @@ export default function ArticlePage({ article }) {
                             padding: tocVisible ? '12px' : '4px',
                             borderTopRightRadius: 12,
                             borderBottomRightRadius: 12,
+                            overflowX: 'hidden',
                             color: 'white',
                             maxHeight: '80vh',
-                            overflowY: tocVisible ? 'auto' : 'hidden', // Hide scrollbar when collapsed
+                            overflowY: 'auto',
                             boxShadow: '2px 2px 8px rgba(0,0,0,0.3)',
                             transition: 'width 0.3s ease, padding 0.3s ease',
                             width: tocVisible ? '240px' : '20px',
@@ -249,7 +250,6 @@ export default function ArticlePage({ article }) {
                     </>
                 )}
             </div >
-
             {/* Article Content */}
             <article>
                 <Box mx="auto" w={{ base: '70%', md: '35%' }}>
