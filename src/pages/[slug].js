@@ -126,8 +126,8 @@ export default function ArticlePage({ article }) {
                             borderTopRightRadius: 12,
                             borderBottomRightRadius: 12,
                             color: 'white',
-                            maxHeight: tocVisible ? '80vh' : 'auto', // Dynamic maxHeight
-                            overflowY: tocVisible ? 'auto' : 'hidden', // Dynamic overflow
+                            maxHeight: '80vh',
+                            overflowY: tocVisible ? 'auto' : 'hidden', // Hide scrollbar when collapsed
                             boxShadow: '2px 2px 8px rgba(0,0,0,0.3)',
                             transition: 'width 0.3s ease, padding 0.3s ease',
                             width: tocVisible ? '240px' : '20px',
@@ -141,6 +141,7 @@ export default function ArticlePage({ article }) {
                                     writingMode: 'vertical-rl',
                                     transform: 'rotate(180deg)',
                                     cursor: 'pointer',
+                                    padding: '4px 0',
                                     color: '#aaa',
                                     fontWeight: 'bold',
                                 }}
