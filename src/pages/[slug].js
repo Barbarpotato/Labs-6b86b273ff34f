@@ -141,7 +141,6 @@ export default function ArticlePage({ article }) {
                                     writingMode: 'vertical-rl',
                                     transform: 'rotate(180deg)',
                                     cursor: 'pointer',
-                                    padding: '4px 0',
                                     color: '#aaa',
                                     fontWeight: 'bold',
                                 }}
