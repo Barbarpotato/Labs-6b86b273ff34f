@@ -28,9 +28,9 @@ export async function getStaticProps({ params }) {
 export default function ArticlePage({ article }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const btnRef = useRef();
-
     const [isMobile, setIsMobile] = useState(false);
     const [tocVisible, setTocVisible] = useState(false);
+    const [toc, setToc] = useState([]);
 
     useEffect(() => {
         const checkScreen = () => setIsMobile(window.innerWidth < 768);
@@ -39,6 +39,32 @@ export default function ArticlePage({ article }) {
         return () => window.removeEventListener("resize", checkScreen);
     }, []);
 
+    // Generate TOC
+    useEffect(() => {
+        const generateTOC = () => {
+            const div = document.createElement('div');
+            div.innerHTML = article?.description || '';
+            const headers = div.querySelectorAll('h1, h2, h3');
+            return Array.from(headers).map((header, index) => ({
+                id: `toc-header-${index}`,
+                text: header.innerText,
+                level: parseInt(header.tagName.substring(1)),
+            }));
+        };
+
+        setToc(generateTOC());
+    }, [article]);
+
+    // Assign IDs to headers
+    useEffect(() => {
+        const contentDiv = document.querySelector('.content');
+        const headers = contentDiv?.querySelectorAll('h1, h2, h3') || [];
+        headers.forEach((header, index) => {
+            header.setAttribute('id', `toc-header-${index}`);
+        });
+    }, [article]);
+
+    // Style pre and code tags
     useEffect(() => {
         const contentDiv = document.querySelector('.content');
         const preTags = contentDiv?.querySelectorAll('pre') || [];
@@ -61,29 +87,6 @@ export default function ArticlePage({ article }) {
 
         if (contentDiv) observer.observe(contentDiv, { childList: true, subtree: true });
         return () => observer.disconnect();
-    }, [article]);
-
-    // Generate TOC
-    const generateTOC = () => {
-        const div = document.createElement('div');
-        div.innerHTML = article?.description || '';
-        const headers = div.querySelectorAll('h1, h2, h3');
-        return Array.from(headers).map((header, index) => ({
-            id: `toc-header-${index}`,
-            text: header.innerText,
-            level: parseInt(header.tagName.substring(1)),
-        }));
-    };
-
-    const toc = generateTOC();
-
-    // Assign IDs to headers in actual DOM
-    useEffect(() => {
-        const contentDiv = document.querySelector('.content');
-        const headers = contentDiv?.querySelectorAll('h1, h2, h3') || [];
-        headers.forEach((header, index) => {
-            header.setAttribute('id', `toc-header-${index}`);
-        });
     }, [article]);
 
     return (
