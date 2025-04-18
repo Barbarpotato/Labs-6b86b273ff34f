@@ -18,10 +18,13 @@ jobs:
         run: |
           git clone https://github.com/Barbarpotato/labs-detail-template.git temp-template
 
-      - name: Replace [slug].js file
+      - name: Replace files except next.config.js, include package.json
         run: |
-          cp temp-template/src/pages/[slug].js src/pages/[slug].js
-
+          shopt -s extglob
+          rm -rf src/*
+          cp -r temp-template/src/!(next.config.mjs) src/
+          cp temp-template/package.json package.json
+        
       - name: Inject index query param into fetch URL
         run: |
           FILE_PATH="src/pages/[slug].js"
