@@ -1,0 +1,43 @@
+name: Update Slug Page from Template
+
+on:
+  repository_dispatch:
+    types: [update-slug-from-template]
+
+jobs:
+  update-slug:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v3
+
+      - name: Clone template repo
+        run: |
+          git clone https://github.com/Barbarpotato/labs-detail-template temp-template
+
+      - name: Replace [slug].js file
+        run: |
+          cp temp-template/src/pages/[slug].js src/pages/[slug].js
+
+      - name: Inject index query param into fetch URL
+        run: |
+          FILE_PATH="src/pages/[slug].js"
+          INDEX=${{ github.event.client_payload.index }}
+
+          echo "Index value: $INDEX"
+
+          if [ -f "$FILE_PATH" ]; then
+            sed -i "s|\(index=\)[^'\"]*|\1${INDEX}|" "$FILE_PATH"
+          else
+            echo "File not found: $FILE_PATH"
+            exit 1
+          fi
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/pages/[slug].js next.config.mjs
+          git commit -m "Update [slug].js and next.config.mjs with dynamic index" || echo "No changes to commit"
+          git push
