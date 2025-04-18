@@ -43,6 +43,7 @@ jobs:
         run: |
           git config user.name "Barbarpotato"
           git config user.email "darmawanjr88@gmail.com"
-          git add .
+          git add .          # Stage all changes
+          git reset temp-template # Unstage the file you want to exclude
           git commit -m "Update slug page at $(date -u +"%Y-%m-%dT%H:%M:%SZ")" || echo "No changes to commit"
           git push origin HEAD:main
