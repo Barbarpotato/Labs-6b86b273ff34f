@@ -43,6 +43,6 @@ jobs:
         run: |
           git config user.name "Barbarpotato"
           git config user.email "darmawanjr88@gmail.com"
-          git add src/pages/[slug].js
-          git commit -m "Update [slug].js with dynamic index" || echo "No changes to commit"
+          git add .
+          git commit -m "Update slug page at $(date -u +"%Y-%m-%dT%H:%M:%SZ")" || echo "No changes to commit"
           git push origin HEAD:main
