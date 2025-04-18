@@ -23,7 +23,7 @@ jobs:
           shopt -s extglob
           rm -rf src/*
           cp -r temp-template/src/!(next.config.mjs) src/
-          cp temp-template/package.json package.json
+          cp -f temp-template/package.json package.json
         
       - name: Inject index query param into fetch URL
         run: |
