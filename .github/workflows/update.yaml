@@ -13,8 +13,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Clone template repo
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git clone https://github.com/Barbarpotato/labs-detail-template temp-template
+          git clone https://x-access-token:${GH_PAT}@github.com/Barbarpotato/labs-detail-template.git temp-template
 
       - name: Replace [slug].js file
         run: |
