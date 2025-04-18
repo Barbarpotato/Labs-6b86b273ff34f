@@ -38,8 +38,8 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git config user.name "Your Name"
-          git config user.email "you@example.com"
+          git config user.name "Barbarpotato"
+          git config user.email "darmawanjr88@gmail.com"
           git add src/pages/[slug].js
           git commit -m "Update [slug].js with dynamic index" || echo "No changes to commit"
           git push origin HEAD:main
