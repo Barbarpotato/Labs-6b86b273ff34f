@@ -1,108 +1,271 @@
-import React from 'react';
-import { Box, Flex, Text, Link, SimpleGrid, Icon, Heading } from '@chakra-ui/react';
-import { FaGithub, FaInstagram, FaLinkedin, FaTiktok } from 'react-icons/fa';
+import React from "react";
+import {
+    Box,
+    Container,
+    Flex,
+    Grid,
+    Text,
+    Link,
+    HStack,
+    VStack,
+    Icon,
+} from "@chakra-ui/react";
+import {
+    FaGithub,
+    FaInstagram,
+    FaLinkedin,
+    FaTiktok,
+    FaWhatsapp,
+} from "react-icons/fa";
+import { FiArrowUpRight } from "react-icons/fi";
+
+const NAV_LINKS = [
+    { label: "Beranda", href: "https://barbarpotato.github.io/" },
+    { label: "Tentang", href: "https://barbarpotato.github.io/About/" },
+    { label: "Labs", href: "https://barbarpotato.github.io/Labs/" },
+];
+
+const SOCIAL_LINKS = [
+    {
+        label: "GitHub",
+        href: "https://github.com/Barbarpotato",
+        icon: FaGithub,
+    },
+    {
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/in/darmawan-jr-b16135220/",
+        icon: FaLinkedin,
+    },
+    {
+        label: "Instagram",
+        href: "https://www.instagram.com/darmajr94?igsh=OGgwNTRnaGFxeTY1",
+        icon: FaInstagram,
+    },
+    {
+        label: "TikTok",
+        href: "https://www.tiktok.com/@darma.devforeverybody",
+        icon: FaTiktok,
+    },
+    {
+        label: "WhatsApp",
+        href: "https://api.whatsapp.com/send/?phone=6282148282424&text&type=phone_number&app_absent=0",
+        icon: FaWhatsapp,
+    },
+];
+
+const CONNECT_LINKS = [
+    {
+        label: "GitHub",
+        href: "https://github.com/Barbarpotato",
+    },
+    {
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/in/darmawan-jr-b16135220/",
+    },
+    {
+        label: "Instagram",
+        href: "https://www.instagram.com/darmajr94?igsh=OGgwNTRnaGFxeTY1",
+    },
+    {
+        label: "TikTok",
+        href: "https://www.tiktok.com/@darma.devforeverybody",
+    },
+];
 
 const Footer = () => {
-    const primaryFontColor = '#faf9ff';
-    const secondaryColor = '#bd93f9';
     const currentYear = new Date().getFullYear();
 
-    const connectLinks = [
-        { label: 'GitHub', href: 'https://github.com/Barbarpotato' },
-        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/darmawan-jr-b16135220/' },
-        { label: 'Instagram', href: 'https://www.instagram.com/darmajr94?igsh=OGgwNTRnaGFxeTY1' },
-        { label: 'WhatsApp', href: 'https://api.whatsapp.com/send/?phone=6282148282424&text&type=phone_number&app_absent=0' },
-        { label: 'TikTok', href: 'https://www.tiktok.com/@darma.devforeverybody' }
-    ];
-
-    const resourcesLinks = [
-        { label: 'Home', href: 'https://barbarpotato.github.io/' },
-        { label: 'About', href: 'https://barbarpotato.github.io/About/' },
-        { label: 'Labs', href: 'https://barbarpotato.github.io/Labs/' }
-    ];
-
     return (
-        <Box boxShadow={'dark-lg'} as="footer" mt={100} backgroundColor={"#292b37"} color="white" py={10}>
-            <Box maxW="7xl" mx="auto" px={{ base: 4, sm: 6, lg: 8 }}>
-                <Flex direction={{ base: 'column', md: 'row' }} justify={{ md: 'space-between' }}>
-                    <Box mb={{ base: 8, md: 0 }} maxW={{ md: 'md' }}>
-                        <Flex align="center">
-                            <Heading fontSize="2xl" color={primaryFontColor}>
-                                <span style={{ color: secondaryColor, fontWeight: 'bold' }}>🚀D</span>armawan
-                            </Heading>
+        <Box as="footer" bg="#1e1f2b" position="relative" overflow="hidden">
+            {/* ── Main footer columns ── */}
+            <Container maxW="7xl" position="relative" zIndex={1}>
+                <Grid
+                    templateColumns={{
+                        base: "1fr",
+                        md: "2fr 1fr 1fr",
+                    }}
+                    gap={{ base: 12, md: 16 }}
+                    py={{ base: 14, md: 16 }}
+                    borderBottom="1px solid rgba(134, 107, 171, 0.12)"
+                >
+                    {/* Brand column */}
+                    <Box>
+                        {/* Wordmark */}
+                        <Flex align="flex-end" gap="2px" mb={4}>
+                            <Text
+                                fontFamily="'Space Grotesk', system-ui, sans-serif"
+                                fontWeight="900"
+                                fontSize="2xl"
+                                color="#faf9ff"
+                                letterSpacing="-0.03em"
+                                lineHeight="1"
+                            >
+                                DARMA
+                            </Text>
+                            <Text
+                                fontFamily="'Space Grotesk', system-ui, sans-serif"
+                                fontWeight="900"
+                                fontSize="2xl"
+                                color="#cc7bc9"
+                                letterSpacing="-0.03em"
+                                lineHeight="1"
+                            >
+                                WAN
+                            </Text>
+                            <Box
+                                w="5px"
+                                h="5px"
+                                borderRadius="full"
+                                bg="#866bab"
+                                ml="2px"
+                                mb="3px"
+                            />
                         </Flex>
-                        <Text mt={2} color="gray.400">
-                            Crafting cutting-edge web experiences with passion and innovation. Let's collaborate to turn your vision into reality.
+
+                        <Box
+                            w="36px"
+                            h="2px"
+                            bg="#866bab"
+                            borderRadius="full"
+                            mb={5}
+                        />
+
+                        <Text
+                            fontFamily="'Outfit', system-ui, sans-serif"
+                            color="#c0c0c0"
+                            fontSize="md"
+                            lineHeight="1.85"
+                            maxW="300px"
+                            mb={7}
+                        >
+                            Software Engineer, Content Creator, dan penulis
+                            e-book yang fokus pada pola pikir pengembangan
+                            perangkat lunak.
                         </Text>
+
+                        {/* Social icons */}
+                        <HStack spacing={4}>
+                            {SOCIAL_LINKS.map(({ label, href, icon }) => (
+                                <Link
+                                    key={label}
+                                    href={href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label={label}
+                                    className="social-icon"
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    w="36px"
+                                    h="36px"
+                                    borderRadius="full"
+                                    border="1px solid rgba(134, 107, 171, 0.35)"
+                                    color="#866bab"
+                                    _hover={{
+                                        color: "#cc7bc9",
+                                        borderColor: "#cc7bc9",
+                                        bg: "rgba(204, 123, 201, 0.08)",
+                                    }}
+                                    transition="all 0.25s ease"
+                                >
+                                    <Icon as={icon} boxSize={4} />
+                                </Link>
+                            ))}
+                        </HStack>
                     </Box>
 
-                    <SimpleGrid columns={{ base: 2, sm: 3 }} spacing={8} w={{ base: 'full', md: 'auto' }}>
-                        {/* Connect Links */}
-                        <Box>
-                            <Text fontSize="sm" fontWeight="semibold" textTransform="uppercase" mb={4}>
-                                Connect
-                            </Text>
-                            <Flex direction="column" gap={2}>
-                                {connectLinks.map(({ label, href }) => (
-                                    <Link
-                                        key={label}
-                                        href={href}
-                                        target="_blank"
-                                        color="gray.400"
-                                        _hover={{ color: 'pink.300' }}
-                                    >
-                                        {label}
-                                    </Link>
-                                ))}
-                            </Flex>
-                        </Box>
+                    {/* Navigation column */}
+                    <Box>
+                        <Text
+                            fontFamily="'Outfit', system-ui, sans-serif"
+                            fontWeight="700"
+                            fontSize="10px"
+                            letterSpacing="0.22em"
+                            textTransform="uppercase"
+                            color="#866bab"
+                            mb={6}
+                        >
+                            Navigasi
+                        </Text>
+                        <VStack align="flex-start" spacing={4}>
+                            {NAV_LINKS.map(({ label, href }) => (
+                                <Link
+                                    key={label}
+                                    href={href}
+                                    fontFamily="'Outfit', system-ui, sans-serif"
+                                    color="#c0c0c0"
+                                    fontSize="md"
+                                    fontWeight="400"
+                                    _hover={{ color: "#faf9ff" }}
+                                    transition="color 0.2s ease"
+                                >
+                                    {label}
+                                </Link>
+                            ))}
+                        </VStack>
+                    </Box>
 
-                        {/* Resources Links */}
-                        <Box>
-                            <Text fontSize="sm" fontWeight="semibold" textTransform="uppercase" mb={4}>
-                                Resources
-                            </Text>
-                            <Flex direction="column" gap={2}>
-                                {resourcesLinks.map(({ label, href }) => (
-                                    <Link
-                                        key={label}
-                                        href={href}
-                                        color="gray.400"
-                                        _hover={{ color: 'pink.300' }}
-                                    >
-                                        {label}
-                                    </Link>
-                                ))}
-                            </Flex>
-                        </Box>
-                    </SimpleGrid>
+                    {/* Connect column */}
+                    <Box>
+                        <Text
+                            fontFamily="'Outfit', system-ui, sans-serif"
+                            fontWeight="700"
+                            fontSize="10px"
+                            letterSpacing="0.22em"
+                            textTransform="uppercase"
+                            color="#866bab"
+                            mb={6}
+                        >
+                            Terhubung
+                        </Text>
+                        <VStack align="flex-start" spacing={4}>
+                            {CONNECT_LINKS.map(({ label, href }) => (
+                                <Link
+                                    key={label}
+                                    href={href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    display="inline-flex"
+                                    alignItems="center"
+                                    gap={1.5}
+                                    fontFamily="'Outfit', system-ui, sans-serif"
+                                    color="#c0c0c0"
+                                    fontSize="md"
+                                    fontWeight="400"
+                                    _hover={{ color: "#faf9ff" }}
+                                    transition="color 0.2s ease"
+                                >
+                                    {label}
+                                    <FiArrowUpRight size={14} style={{ opacity: 0.5 }} />
+                                </Link>
+                            ))}
+                        </VStack>
+                    </Box>
+                </Grid>
+
+                {/* ── Bottom bar ── */}
+                <Flex
+                    justify="space-between"
+                    align="center"
+                    py={5}
+                    direction={{ base: "column", md: "row" }}
+                    gap={2}
+                >
+                    <Text
+                        fontFamily="'Outfit', system-ui, sans-serif"
+                        fontSize="sm"
+                        color="rgba(134, 107, 171, 0.45)"
+                    >
+                        © {currentYear} Barbarpotato. All rights reserved.
+                    </Text>
+                    <Text
+                        fontFamily="'Outfit', system-ui, sans-serif"
+                        fontSize="sm"
+                        color="rgba(134, 107, 171, 0.45)"
+                    >
+                    </Text>
                 </Flex>
-
-                <Box mt={8} pt={8} borderTop="1px" borderColor="gray.800">
-                    <Flex direction={{ base: 'column', md: 'row' }} align={{ md: 'center' }} justify={{ md: 'space-between' }}>
-                        <Flex order={{ md: 2 }} gap={6} mb={{ base: 8, md: 0 }} justify={{ base: 'center', md: 'flex-start' }}>
-                            <Link href="https://github.com/Barbarpotato" target="_blank" color="gray.400" _hover={{ color: 'pink.300' }} aria-label="Visit my GitHub profile">
-                                <Icon as={FaGithub} boxSize={6} />
-                            </Link>
-                            <Link href="https://www.linkedin.com/in/darmawan-jr-b16135220/" target="_blank" color="gray.400" _hover={{ color: 'pink.300' }} aria-label="Visit my LinkedIn profile">
-                                <Icon as={FaLinkedin} boxSize={6} />
-                            </Link>
-                            <Link href="https://www.instagram.com/darmajr94?igsh=OGgwNTRnaGFxeTY1" target="_blank" color="gray.400" _hover={{ color: 'pink.300' }} aria-label="Visit my Instagram profile">
-                                <Icon as={FaInstagram} boxSize={6} />
-                            </Link>
-                            <Link href="https://www.tiktok.com/@darma.devforeverybody" target="_blank" color="gray.400" _hover={{ color: 'pink.300' }} aria-label="Visit my TikTok profile">
-                                <Icon as={FaTiktok} boxSize={6} />
-                            </Link>
-                        </Flex>
-
-                        <Flex order={{ md: 1 }} direction="row" align="center" color="gray.400" justify={{ base: 'center', md: 'flex-start' }}>
-                            <Text fontSize="base">
-                                © {currentYear} Barbarpotato. All rights reserved.
-                            </Text>
-                        </Flex>
-                    </Flex>
-                </Box>
-            </Box>
+            </Container>
         </Box>
     );
 };

@@ -2,7 +2,7 @@
 import { ChakraProvider } from "@chakra-ui/react";
 
 // Custom Components
-import Header from '@/components/Header';
+import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 
 // CSS
@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }) {
     return (
         <ChakraProvider>
             {/* Navigation Bar */}
-            <Header />
+            <Navigation />
 
             {/* Render the current page */}
             <Component {...pageProps} />
