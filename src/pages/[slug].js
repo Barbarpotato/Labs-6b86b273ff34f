@@ -3,10 +3,9 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { AiOutlineCalendar } from "react-icons/ai";
 import {
     Box, Heading, HStack,
-    useDisclosure, VStack, Divider,
-    Flex, Text, TagLabel, Tag, WrapItem, Wrap
+    VStack, Text, Tag, TagLabel, Wrap, WrapItem
 } from "@chakra-ui/react";
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 import BlogCard from '@/components/BlogCard';
 
@@ -28,40 +27,29 @@ export async function getStaticPaths() {
 
 
 export async function getStaticProps({ params }) {
-
     const res = await fetch(`https://api-barbarpotato.vercel.app/labs?slug=${params.slug}`);
     if (!res.ok) return { notFound: true };
 
     let article = await res.json();
     if (article.data) article = article.data[0];
 
-    // find the tags from search
     const res2 = await fetch(`https://api-barbarpotato.vercel.app/labs/search?blog_id=${article.blog_id}`);
     const data = await res2.json();
     const tagArticles = data.data[0];
 
-    // Fetch recommended blogs based on tags
     const tags = tagArticles.tags.join(',');
     const recommendedRes = await fetch(`https://api-barbarpotato.vercel.app/labs/search?tag=${tags}`);
     const recommendedData = await recommendedRes.json();
 
-    // Ensure recommendedPosts is an array, and filter out the current article
     const recommendedPosts = (recommendedData.data || [])
-        .filter((recommendedPost) => recommendedPost.blog_id !== article.blog_id) // Exclude current article
-        .slice(0, 3); // Return only top 3 posts
+        .filter((p) => p.blog_id !== article.blog_id)
+        .slice(0, 3);
 
-    return {
-        props: {
-            article,
-            recommendedPosts
-        }
-    };
+    return { props: { article, recommendedPosts } };
 }
 
 
 export default function ArticlePage({ article, recommendedPosts }) {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const btnRef = useRef();
     const [isMobile, setIsMobile] = useState(false);
     const [tocVisible, setTocVisible] = useState(false);
     const [toc, setToc] = useState([]);
@@ -73,23 +61,17 @@ export default function ArticlePage({ article, recommendedPosts }) {
         return () => window.removeEventListener("resize", checkScreen);
     }, []);
 
-    // Generate TOC
     useEffect(() => {
-        const generateTOC = () => {
-            const div = document.createElement('div');
-            div.innerHTML = article?.description || '';
-            const headers = div.querySelectorAll('h1, h2, h3');
-            return Array.from(headers).map((header, index) => ({
-                id: `toc-header-${index}`,
-                text: header.innerText,
-                level: parseInt(header.tagName.substring(1)),
-            }));
-        };
-
-        setToc(generateTOC());
+        const div = document.createElement('div');
+        div.innerHTML = article?.description || '';
+        const headers = div.querySelectorAll('h1, h2, h3');
+        setToc(Array.from(headers).map((header, index) => ({
+            id: `toc-header-${index}`,
+            text: header.innerText,
+            level: parseInt(header.tagName.substring(1)),
+        })));
     }, [article]);
 
-    // Assign IDs to headers
     useEffect(() => {
         const contentDiv = document.querySelector('.content');
         const headers = contentDiv?.querySelectorAll('h1, h2, h3') || [];
@@ -98,31 +80,24 @@ export default function ArticlePage({ article, recommendedPosts }) {
         });
     }, [article]);
 
-    // Style pre and code tags
     useEffect(() => {
         const contentDiv = document.querySelector('.content');
         const preTags = contentDiv?.querySelectorAll('pre') || [];
         const codeTags = contentDiv?.querySelectorAll('code') || [];
 
         preTags.forEach(tag => {
-            tag.style.width = "1024px";
-            tag.parentNode.style.overflowX = 'scroll';
+            tag.style.maxWidth = '100%';
+            tag.style.overflowX = 'auto';
         });
 
         codeTags.forEach(tag => {
-            tag.classList.add('language-js'); // You can specify the language here
+            tag.classList.add('language-js');
         });
 
-        // Initialize Prism for syntax highlighting
         Prism.highlightAll();
 
-        // Observer for dynamic content updates
-        const observer = new MutationObserver(() => {
-            Prism.highlightAll(); // Re-apply syntax highlighting on new content
-        });
-
+        const observer = new MutationObserver(() => Prism.highlightAll());
         if (contentDiv) observer.observe(contentDiv, { childList: true, subtree: true });
-
         return () => observer.disconnect();
     }, [article]);
 
@@ -138,87 +113,83 @@ export default function ArticlePage({ article, recommendedPosts }) {
                 <meta property="og:url" content={`https://barbarpotato.github.io/labs/${article.slug}`} />
             </Head>
 
-            {/* TOC Container */}
-            <div
-                style={{
-                    position: 'fixed',
-                    left: 0,
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    zIndex: 1000,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    padding: '6px',
-                }}
-            >
+            {/* ── Table of Contents (fixed left) ── */}
+            <div style={{ position: 'fixed', left: 0, top: '50%', transform: 'translateY(-50%)', zIndex: 1000 }}>
 
+                {/* Desktop TOC */}
                 {!isMobile && (
                     <div
                         onMouseEnter={() => setTocVisible(true)}
                         onMouseLeave={() => setTocVisible(false)}
                         style={{
-                            backgroundColor: '#1E1E1E',
-                            padding: tocVisible ? '12px' : 0,
-                            borderTopRightRadius: 12,
-                            borderBottomRightRadius: 12,
-                            overflowX: 'hidden',
-                            color: 'white',
-                            maxHeight: '80vh',
-                            overflowY: 'auto',
-                            boxShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                            backgroundColor: '#2a2540',
+                            border: '1px solid rgba(134, 107, 171, 0.3)',
+                            borderLeft: 'none',
+                            padding: tocVisible ? '16px 18px' : 0,
+                            borderTopRightRadius: 16,
+                            borderBottomRightRadius: 16,
+                            overflow: 'hidden',
+                            maxHeight: '75vh',
+                            overflowY: tocVisible ? 'auto' : 'hidden',
+                            boxShadow: '4px 0 20px rgba(0,0,0,0.35)',
                             transition: 'width 0.3s ease, padding 0.3s ease',
-                            width: tocVisible ? '240px' : '20px',
-                            fontFamily: 'sans-serif',
-                            fontSize: '0.9em',
+                            width: tocVisible ? '260px' : '26px',
+                            fontFamily: "'Outfit', system-ui, sans-serif",
                         }}
                     >
                         {!tocVisible ? (
-                            <div
-                                style={{
-                                    writingMode: 'vertical-rl',
-                                    transform: 'rotate(180deg)',
-                                    cursor: 'pointer',
-                                    color: '#aaa',
-                                    fontWeight: 'bold',
-                                    textAlign: 'center',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    padding: '12px 0px 12px 12px',
-                                }}
-                            >
-                                Table Of Contents
+                            <div style={{
+                                writingMode: 'vertical-rl',
+                                transform: 'rotate(180deg)',
+                                cursor: 'pointer',
+                                color: '#866bab',
+                                fontWeight: '700',
+                                padding: '16px 0 16px 14px',
+                                letterSpacing: '0.12em',
+                                fontSize: '0.6rem',
+                                textTransform: 'uppercase',
+                                whiteSpace: 'nowrap',
+                            }}>
+                                Table of Contents
                             </div>
                         ) : (
-                            toc.map(item => (
-                                <div
-                                    key={item.id}
-                                    style={{
-                                        marginLeft: (item.level - 1) * 12,
-                                        padding: '6px 0',
-                                        backgroundColor: '#1E1E1E',
-                                        color: 'white',
-                                        fontFamily: 'sans-serif',
-                                        fontSize: '0.9em',
-                                        opacity: tocVisible ? 1 : 0.4,
-                                    }}
-                                >
-                                    <a
-                                        href={`#${item.id}`}
-                                        style={{
-                                            color: '#f0f0f0',
-                                            textDecoration: 'none',
-                                        }}
-                                    >
-                                        {item.text}
-                                    </a>
+                            <>
+                                <div style={{
+                                    color: '#866bab',
+                                    fontWeight: '700',
+                                    fontSize: '0.6rem',
+                                    letterSpacing: '0.2em',
+                                    textTransform: 'uppercase',
+                                    marginBottom: '14px',
+                                    whiteSpace: 'nowrap',
+                                }}>
+                                    Table of Contents
                                 </div>
-                            ))
+                                {toc.map(item => (
+                                    <div key={item.id} style={{ marginLeft: (item.level - 1) * 14, padding: '4px 0' }}>
+                                        <a
+                                            href={`#${item.id}`}
+                                            style={{
+                                                color: '#c0c0c0',
+                                                textDecoration: 'none',
+                                                fontSize: '0.78rem',
+                                                lineHeight: 1.5,
+                                                display: 'block',
+                                                transition: 'color 0.2s ease',
+                                            }}
+                                            onMouseEnter={e => e.currentTarget.style.color = '#cc7bc9'}
+                                            onMouseLeave={e => e.currentTarget.style.color = '#c0c0c0'}
+                                        >
+                                            {item.text}
+                                        </a>
+                                    </div>
+                                ))}
+                            </>
                         )}
                     </div>
                 )}
 
+                {/* Mobile TOC */}
                 {isMobile && (
                     <>
                         <button
@@ -226,62 +197,67 @@ export default function ArticlePage({ article, recommendedPosts }) {
                             style={{
                                 position: 'fixed',
                                 top: '50%',
-                                left: 8,
+                                left: 0,
                                 transform: 'translateY(-50%)',
                                 zIndex: 1100,
-                                backgroundColor: '#3F3F3F',
-                                color: 'white',
-                                border: 'none',
-                                borderTopRightRadius: 12,
-                                borderBottomRightRadius: 12,
-                                padding: 8,
+                                backgroundColor: '#2a2540',
+                                color: '#866bab',
+                                border: '1px solid rgba(134, 107, 171, 0.4)',
+                                borderLeft: 'none',
+                                borderTopRightRadius: 10,
+                                borderBottomRightRadius: 10,
+                                padding: '8px 4px',
                                 cursor: 'pointer',
                                 writingMode: 'vertical-rl',
-                                transformOrigin: 'center',
-                                fontSize: '0.7em',
-                                height: 60,
-                                width: 28,
-                                boxShadow: '2px 2px 6px rgba(0,0,0,0.3)',
+                                fontSize: '0.55rem',
+                                fontWeight: '700',
+                                letterSpacing: '0.1em',
+                                textTransform: 'uppercase',
+                                height: 68,
+                                width: 22,
+                                fontFamily: "'Outfit', system-ui, sans-serif",
                             }}
                         >
                             TOC
                         </button>
 
                         {tocVisible && (
-                            <div
-                                style={{
-                                    position: 'fixed',
-                                    top: '50%',
-                                    left: 42,
-                                    transform: 'translateY(-50%)',
-                                    backgroundColor: '#1E1E1E',
-                                    padding: '12px 25px',
-                                    borderRadius: 8,
-                                    color: 'white',
-                                    maxHeight: '70vh',
-                                    width: '220px', // ← wider
-                                    overflowY: 'auto',
-                                    boxShadow: '2px 2px 8px rgba(0,0,0,0.3)',
-                                    zIndex: 1099,
-                                }}
-                            >
+                            <div style={{
+                                position: 'fixed',
+                                top: '50%',
+                                left: 28,
+                                transform: 'translateY(-50%)',
+                                backgroundColor: '#2a2540',
+                                border: '1px solid rgba(134, 107, 171, 0.3)',
+                                padding: '14px 18px',
+                                borderRadius: 12,
+                                maxHeight: '70vh',
+                                width: '220px',
+                                overflowY: 'auto',
+                                boxShadow: '4px 4px 20px rgba(0,0,0,0.4)',
+                                zIndex: 1099,
+                                fontFamily: "'Outfit', system-ui, sans-serif",
+                            }}>
+                                <div style={{
+                                    color: '#866bab',
+                                    fontWeight: '700',
+                                    fontSize: '0.6rem',
+                                    letterSpacing: '0.2em',
+                                    textTransform: 'uppercase',
+                                    marginBottom: '12px',
+                                }}>
+                                    Table of Contents
+                                </div>
                                 {toc.map(item => (
-                                    <div
-                                        key={item.id}
-                                        style={{
-                                            marginLeft: (item.level - 1) * 12,
-                                            padding: '6px 0',
-                                            borderBottom: '1px solid #333',
-                                        }}
-                                    >
+                                    <div key={item.id} style={{
+                                        marginLeft: (item.level - 1) * 12,
+                                        padding: '5px 0',
+                                        borderBottom: '1px solid rgba(134, 107, 171, 0.1)',
+                                    }}>
                                         <a
                                             href={`#${item.id}`}
-                                            style={{
-                                                color: '#f0f0f0',
-                                                textDecoration: 'none',
-                                                display: 'block',
-                                                fontSize: '0.9em',
-                                            }}
+                                            onClick={() => setTocVisible(false)}
+                                            style={{ color: '#c0c0c0', textDecoration: 'none', fontSize: '0.8rem', display: 'block' }}
                                         >
                                             {item.text}
                                         </a>
@@ -291,96 +267,184 @@ export default function ArticlePage({ article, recommendedPosts }) {
                         )}
                     </>
                 )}
-            </div >
+            </div>
 
-            {/* Article Content */}
-            <article style={{ marginTop: '50px' }}>
+            {/* ── Article ── */}
+            <Box as="article" bg="#292b37" minH="100vh">
 
+                {/* ── Hero ── */}
+                <Box
+                    position="relative"
+                    overflow="hidden"
+                    pt={{ base: 10, md: 16 }}
+                    pb={{ base: 8, md: 12 }}
+                    borderBottom="1px solid rgba(134, 107, 171, 0.12)"
+                >
+                    {/* Ambient glow decoration */}
+                    <Box
+                        position="absolute"
+                        top="-80px"
+                        left="50%"
+                        transform="translateX(-50%)"
+                        w="700px"
+                        h="320px"
+                        borderRadius="full"
+                        bg="rgba(134, 107, 171, 0.05)"
+                        filter="blur(80px)"
+                        pointerEvents="none"
+                    />
 
-                <Box mx="auto" w={{ base: '70%', md: '35%' }}>
+                    <Box mx="auto" maxW="720px" px={{ base: 5, md: 8 }} position="relative">
 
-                    <Flex opacity={0.7} __hover={{ opacity: 1 }} alignItems="center" my={6} cursor="pointer" onClick={() => window.location.href = '/Labs/'}>
-                        <FaArrowLeft />
-                        <Text ml={2}>Back to Labs Content</Text>
-                    </Flex>
-
-                    <Wrap spacing={3} my={6}>
-                        {article.tags.map((tag, index) => (
-                            <WrapItem key={index}>
-                                <Tag
-                                    size="md"
-                                    borderRadius="full"
-                                    variant="solid"
-                                    colorScheme="gray"
-                                >
-                                    <TagLabel>{tag}</TagLabel>
-                                </Tag>
-                            </WrapItem>
-                        ))}
-                    </Wrap>
-
-                    <Heading my={6} color="whitesmoke">{article.title}</Heading>
-
-                    <HStack
-                        my={6}
-                        spacing={2}
-                        align="center"
-                        flexWrap="wrap"   // allows wrapping on small screens
-                    >
-                        <AiOutlineCalendar size={20} style={{ opacity: 0.7 }} />
-                        <Text
-                            fontSize={{ base: "xs", md: "sm" }}
-                            color="gray.500"
-                            whiteSpace={{ base: "normal", md: "nowrap" }}  // wrap on mobile, no wrap on desktop
+                        {/* Back button */}
+                        <Box
+                            as="button"
+                            onClick={() => window.location.href = '/Labs/'}
+                            display="flex"
+                            alignItems="center"
+                            gap={2}
+                            mb={10}
+                            color="#866bab"
+                            fontFamily="'Outfit', system-ui, sans-serif"
+                            fontSize="sm"
+                            fontWeight="500"
+                            transition="color 0.2s ease"
+                            _hover={{ color: "#cc7bc9" }}
+                            bg="transparent"
+                            border="none"
+                            cursor="pointer"
+                            p={0}
                         >
-                            {article.timestamp}
-                        </Text>
-                    </HStack>
+                            <FaArrowLeft size={13} />
+                            Back to Labs
+                        </Box>
 
+                        {/* Tags */}
+                        <Wrap spacing={2} mb={6}>
+                            {article.tags.map((tag, i) => (
+                                <WrapItem key={i}>
+                                    <Tag
+                                        size="sm"
+                                        borderRadius="full"
+                                        bg="rgba(134, 107, 171, 0.1)"
+                                        border="1px solid rgba(134, 107, 171, 0.4)"
+                                        color="#866bab"
+                                        fontFamily="'Outfit', system-ui, sans-serif"
+                                        fontWeight="500"
+                                        px={3}
+                                        py={1}
+                                    >
+                                        <TagLabel fontSize="xs">{tag}</TagLabel>
+                                    </Tag>
+                                </WrapItem>
+                            ))}
+                        </Wrap>
+
+                        {/* Title */}
+                        <Heading
+                            fontFamily="'Playfair Display', Georgia, serif"
+                            fontWeight="800"
+                            fontSize={{ base: "2xl", md: "4xl", lg: "5xl" }}
+                            color="#faf9ff"
+                            lineHeight="1.2"
+                            letterSpacing="-0.01em"
+                            mb={6}
+                        >
+                            {article.title}
+                        </Heading>
+
+                        {/* Date */}
+                        <HStack spacing={2}>
+                            <AiOutlineCalendar size={15} style={{ color: '#866bab', flexShrink: 0 }} />
+                            <Text
+                                fontFamily="'Outfit', system-ui, sans-serif"
+                                fontSize="sm"
+                                color="#c0c0c0"
+                            >
+                                {article.timestamp}
+                            </Text>
+                        </HStack>
+                    </Box>
                 </Box>
 
-                <Divider mx="auto" w={{ base: '70%', md: '35%' }} my={6} />
-
-                <Box mx="auto" w={{ base: '70%', md: '35%' }} display="flex" justifyContent="center">
+                {/* ── Content body ── */}
+                <Box mx="auto" maxW="720px" px={{ base: 5, md: 8 }} py={{ base: 10, md: 14 }}>
                     <div
                         className="content"
-                        style={{ overflowX: 'auto', fontSize: '1.3em' }}
+                        style={{ overflowX: 'auto' }}
                         dangerouslySetInnerHTML={{ __html: article.description }}
                     />
                 </Box>
 
-
+                {/* ── Recommended posts ── */}
                 {recommendedPosts.length > 0 && (
                     <Fragment>
-                        <Divider mx="auto" w={{ base: '70%', md: '35%' }} my={10} />
-                        <Box mx="auto" w={{ base: '70%', md: '35%' }} borderColor="gray.200">
-                            <Heading fontWeight="bold" mb={6}>
-                                Another Recommended Labs Content
-                            </Heading>
-                            <VStack spacing={6}>
-                                {recommendedPosts.map((recommendedPost) => (
-                                    <BlogCard
-                                        key={recommendedPost.blog_id}
-                                        article={{
-                                            id: recommendedPost.blog_id,
-                                            title: recommendedPost.title,
-                                            slug: recommendedPost.slug,
-                                            excerpt: recommendedPost.short_description,
-                                            date: recommendedPost.timestamp,
-                                            index: recommendedPost.index,
-                                            categories: recommendedPost.tags,
-                                            image: recommendedPost.image
-                                        }}
-                                    />
-                                ))}
-                            </VStack>
+                        <Box
+                            bg="rgba(56, 58, 74, 0.35)"
+                            borderTop="1px solid rgba(134, 107, 171, 0.12)"
+                            py={{ base: 12, md: 16 }}
+                        >
+                            <Box mx="auto" maxW="720px" px={{ base: 5, md: 8 }}>
+
+                                {/* Section heading */}
+                                <Box mb={10}>
+                                    <Heading
+                                        fontFamily="'Playfair Display', Georgia, serif"
+                                        fontWeight="800"
+                                        fontStyle="italic"
+                                        fontSize={{ base: "2xl", md: "3xl" }}
+                                        color="#faf9ff"
+                                        display="inline-block"
+                                    >
+                                        Artikel{" "}
+                                        <Box as="span" position="relative" display="inline-block">
+                                            Terkait
+                                            <svg
+                                                viewBox="0 0 200 14"
+                                                style={{
+                                                    position: 'absolute',
+                                                    bottom: '-6px',
+                                                    left: 0,
+                                                    width: '100%',
+                                                    overflow: 'visible',
+                                                    pointerEvents: 'none',
+                                                }}
+                                            >
+                                                <path
+                                                    d="M 4,7 C 50,1 150,1 196,7"
+                                                    fill="none"
+                                                    stroke="#cc7bc9"
+                                                    strokeWidth="3.5"
+                                                    strokeLinecap="round"
+                                                />
+                                            </svg>
+                                        </Box>
+                                    </Heading>
+                                </Box>
+
+                                <VStack spacing={5}>
+                                    {recommendedPosts.map((post) => (
+                                        <BlogCard
+                                            key={post.blog_id}
+                                            article={{
+                                                id: post.blog_id,
+                                                title: post.title,
+                                                slug: post.slug,
+                                                excerpt: post.short_description,
+                                                date: post.timestamp,
+                                                index: post.index,
+                                                categories: post.tags,
+                                                image: post.image
+                                            }}
+                                        />
+                                    ))}
+                                </VStack>
+                            </Box>
                         </Box>
                     </Fragment>
                 )}
 
-
-            </article >
-
+            </Box>
         </>
     );
 }

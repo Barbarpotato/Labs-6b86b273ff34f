@@ -1,83 +1,101 @@
-import { Badge, Text, Card, CardBody, CardFooter, CardHeader, Heading, Flex, Spacer } from '@chakra-ui/react';
-import { FaCalendarAlt } from 'react-icons/fa'; // Importing calendar icon from react-icons
+import { Badge, Text, Box, Heading, Flex } from '@chakra-ui/react';
+import { FaCalendarAlt } from 'react-icons/fa';
+import { FiArrowRight } from 'react-icons/fi';
 
-// Define your custom colors based on your theme
-const themeColors = {
-    background: '#292b37',
-    text: '#faf9ff',
-    accent: '#866bab',
-    hover: '#cc7bc9',
-    mutedText: '#b0b0b0',
-};
-
-// Format the date
 const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 };
 
-// BlogCard component
 const BlogCard = ({ article }) => {
+    const href = `https://barbarpotato.github.io/Labs-${article.index}/${article.slug}`;
+
     return (
-        <Card
-            width={'100%'}
-            variant="outline"
-            borderRadius="lg"
-            boxShadow="md"
-            _hover={{ boxShadow: 'lg', borderColor: themeColors.hover }}
-            transition="all 0.2s"
-            bg={themeColors.background}
-            color={themeColors.text}
+        <Box
+            w="100%"
+            bg="#383a4a"
+            borderRadius="xl"
+            border="1px solid rgba(134, 107, 171, 0.2)"
+            p={6}
+            className="project-card"
+            _hover={{
+                boxShadow: '0px 0px 25px rgba(204, 123, 201, 0.25)',
+                borderColor: 'rgba(204, 123, 201, 0.4)',
+            }}
+            transition="all 0.2s ease"
         >
-            <CardHeader>
-                <Flex wrap="wrap" gap={2} mb={2}>
-                    {article.categories.map((category) => (
-                        <Badge
-                            key={category}
-                            variant="subtle"
-                            colorScheme="purple"
-                            _hover={{ bg: themeColors.accent, color: themeColors.text }}
-                        >
-                            {category}
-                        </Badge>
-                    ))}
-                </Flex>
-                <Heading as="h3" size="md" isTruncated>
-                    <a
-                        href={`/blog/${article.slug}`}
-                        style={{ textDecoration: 'none', color: themeColors.text, fontWeight: 'bold' }}
-                        _hover={{ color: themeColors.hover }}
+            <Flex wrap="wrap" gap={2} mb={4}>
+                {article.categories.map((category) => (
+                    <Badge
+                        key={category}
+                        bg="rgba(134, 107, 171, 0.15)"
+                        color="#866bab"
+                        borderRadius="full"
+                        px={2.5}
+                        py={0.5}
+                        fontFamily="'Outfit', system-ui, sans-serif"
+                        fontSize="xs"
+                        fontWeight="500"
+                        textTransform="none"
                     >
-                        {article.title}
-                    </a>
-                </Heading>
-                <Flex align="center" fontSize="sm" color={themeColors.mutedText} mt={2}>
-                    <FaCalendarAlt size={16} style={{ marginRight: '4px' }} />
-                    <Text as="time" dateTime={article.date}>{formatDate(article.date)}</Text>
-                    <Spacer />
-                </Flex>
-            </CardHeader>
-            <CardBody flex="1">
-                <Text color={themeColors.mutedText} noOfLines={3}>{article.excerpt}</Text>
-            </CardBody>
-            <CardFooter>
-                <a
-                    href={`https://barbarpotato.github.io/Labs-${article.index}/${article.slug}`}
-                    style={{ textDecoration: 'none', color: themeColors.accent }}
-                >
-                    <Text
-                        _hover={{ textDecoration: 'underline', color: themeColors.hover }}
-                        fontWeight="medium"
-                    >
-                        Read more
-                    </Text>
+                        {category}
+                    </Badge>
+                ))}
+            </Flex>
+
+            <Heading
+                as="h3"
+                fontFamily="'Playfair Display', Georgia, serif"
+                fontWeight="700"
+                fontSize="xl"
+                color="#faf9ff"
+                mb={2}
+                noOfLines={2}
+                lineHeight="1.3"
+            >
+                <a href={href} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    {article.title}
                 </a>
-            </CardFooter>
-        </Card>
+            </Heading>
+
+            <Flex align="center" gap={1.5} mb={4}>
+                <FaCalendarAlt size={12} style={{ color: '#866bab', flexShrink: 0 }} />
+                <Text fontFamily="'Outfit', system-ui, sans-serif" fontSize="xs" color="#c0c0c0">
+                    {formatDate(article.date)}
+                </Text>
+            </Flex>
+
+            <Text
+                fontFamily="'Outfit', system-ui, sans-serif"
+                color="#d0d0d0"
+                fontSize="sm"
+                lineHeight="1.7"
+                noOfLines={3}
+                mb={5}
+            >
+                {article.excerpt}
+            </Text>
+
+            <Box
+                as="a"
+                href={href}
+                display="inline-flex"
+                alignItems="center"
+                gap={1.5}
+                fontFamily="'Outfit', system-ui, sans-serif"
+                fontWeight="500"
+                fontSize="sm"
+                color="#866bab"
+                borderBottom="1px solid"
+                borderColor="#866bab"
+                _hover={{ color: '#cc7bc9', borderColor: '#cc7bc9' }}
+                transition="all 0.2s ease"
+                style={{ textDecoration: 'none' }}
+            >
+                Baca Selengkapnya
+                <FiArrowRight size={13} />
+            </Box>
+        </Box>
     );
 };
 
