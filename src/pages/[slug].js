@@ -54,30 +54,40 @@ export async function getStaticProps({ params }) {
 
 function TocList({ toc, onItemClick }) {
     const minLevel = toc.length ? Math.min(...toc.map(i => i.level)) : 1;
-    return toc.map(item => (
-        <Box
-            key={item.id}
-            ml={(item.level - minLevel) * 4}
-            py="3px"
-        >
-            <a
-                href={`#${item.id}`}
-                onClick={onItemClick}
-                style={{
-                    color: '#c0c0c0',
-                    textDecoration: 'none',
-                    fontSize: '0.78rem',
-                    lineHeight: 1.6,
-                    display: 'block',
-                    transition: 'color 0.2s ease',
-                }}
-                onMouseEnter={e => e.currentTarget.style.color = '#cc7bc9'}
-                onMouseLeave={e => e.currentTarget.style.color = '#c0c0c0'}
-            >
-                {item.text}
-            </a>
-        </Box>
-    ));
+    return toc.map(item => {
+        const isTop = item.level === minLevel;
+        return (
+            <Box key={item.id} ml={(item.level - minLevel) * 4} py="6px">
+                <a
+                    href={`#${item.id}`}
+                    onClick={onItemClick}
+                    style={{
+                        color: '#c0c0c0',
+                        textDecoration: 'none',
+                        fontSize: '0.78rem',
+                        lineHeight: 1.6,
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '7px',
+                        transition: 'color 0.2s ease',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.color = '#cc7bc9'}
+                    onMouseLeave={e => e.currentTarget.style.color = '#c0c0c0'}
+                >
+                    <span style={{
+                        display: 'inline-block',
+                        width: isTop ? '5px' : '3px',
+                        height: isTop ? '5px' : '3px',
+                        borderRadius: '50%',
+                        background: isTop ? '#866bab' : 'rgba(134,107,171,0.45)',
+                        flexShrink: 0,
+                        marginTop: '6px',
+                    }} />
+                    {item.text}
+                </a>
+            </Box>
+        );
+    });
 }
 
 
@@ -182,7 +192,7 @@ export default function ArticlePage({ article, recommendedPosts }) {
                     >
                         Daftar Isi
                     </DrawerHeader>
-                    <DrawerBody px={5} py={4}>
+                    <DrawerBody px={5} py={4} overflowY="auto">
                         <TocList toc={toc} onItemClick={onClose} />
                     </DrawerBody>
                 </DrawerContent>
@@ -291,7 +301,7 @@ export default function ArticlePage({ article, recommendedPosts }) {
                     mx="auto"
                     maxW={{ base: "720px", md: "1060px" }}
                     px={{ base: 5, md: 8 }}
-                    py={{ base: 10, md: 14 }}
+                    pb={{ base: 10, md: 14 }}
                 >
                     <Flex gap={10} align="flex-start">
 
@@ -314,6 +324,7 @@ export default function ArticlePage({ article, recommendedPosts }) {
                                 top="90px"
                                 maxH="calc(100vh - 110px)"
                                 overflowY="auto"
+                                pl={5}
                                 borderLeft="1px solid rgba(134, 107, 171, 0.18)"
                                 sx={{
                                     '&::-webkit-scrollbar': { width: '3px' },
