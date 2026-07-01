@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { FaArrowLeft } from 'react-icons/fa';
 import { AiOutlineCalendar } from "react-icons/ai";
-import { MdOutlineToc } from 'react-icons/md';
+import { FiList } from 'react-icons/fi';
 import {
     Box, Heading, HStack, Flex,
     VStack, Text, Tag, TagLabel, Wrap, WrapItem,
@@ -53,12 +53,12 @@ export async function getStaticProps({ params }) {
 
 
 function TocList({ toc, onItemClick }) {
+    const minLevel = toc.length ? Math.min(...toc.map(i => i.level)) : 1;
     return toc.map(item => (
         <Box
             key={item.id}
-            ml={(item.level - 1) * 14}
-            py="4px"
-            borderBottom="1px solid rgba(134, 107, 171, 0.08)"
+            ml={(item.level - minLevel) * 4}
+            py="3px"
         >
             <a
                 href={`#${item.id}`}
@@ -157,7 +157,7 @@ export default function ArticlePage({ article, recommendedPosts }) {
                 transition="all 0.2s ease"
                 _hover={{ bg: "#332d52", borderColor: "#cc7bc9" }}
             >
-                <MdOutlineToc size={22} color="#cc7bc9" />
+                <FiList size={20} color="#cc7bc9" />
             </Box>
 
             {/* ── Mobile Drawer (right) ── */}
@@ -180,7 +180,7 @@ export default function ArticlePage({ article, recommendedPosts }) {
                         pb={3}
                         borderBottom="1px solid rgba(134, 107, 171, 0.12)"
                     >
-                        Table of Contents
+                        Daftar Isi
                     </DrawerHeader>
                     <DrawerBody px={5} py={4}>
                         <TocList toc={toc} onItemClick={onClose} />
@@ -308,27 +308,28 @@ export default function ArticlePage({ article, recommendedPosts }) {
                         {toc.length > 0 && (
                             <Box
                                 display={{ base: "none", md: "block" }}
-                                w="220px"
+                                w="200px"
                                 flexShrink={0}
                                 position="sticky"
                                 top="90px"
                                 maxH="calc(100vh - 110px)"
                                 overflowY="auto"
+                                borderLeft="1px solid rgba(134, 107, 171, 0.18)"
                                 sx={{
-                                    '&::-webkit-scrollbar': { width: '4px' },
-                                    '&::-webkit-scrollbar-thumb': { background: 'rgba(134,107,171,0.3)', borderRadius: '4px' },
+                                    '&::-webkit-scrollbar': { width: '3px' },
+                                    '&::-webkit-scrollbar-thumb': { background: 'rgba(134,107,171,0.25)', borderRadius: '4px' },
                                 }}
                             >
                                 <Text
                                     fontFamily="'Outfit', system-ui, sans-serif"
-                                    fontSize="xs"
+                                    fontSize="9px"
                                     fontWeight="700"
                                     color="#866bab"
-                                    letterSpacing="0.2em"
+                                    letterSpacing="0.22em"
                                     textTransform="uppercase"
-                                    mb={4}
+                                    mb={3}
                                 >
-                                    Table of Contents
+                                    Daftar Isi
                                 </Text>
                                 <TocList toc={toc} onItemClick={undefined} />
                             </Box>
