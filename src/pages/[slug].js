@@ -1,9 +1,12 @@
 import Head from 'next/head';
 import { FaArrowLeft } from 'react-icons/fa';
 import { AiOutlineCalendar } from "react-icons/ai";
+import { MdOutlineToc } from 'react-icons/md';
 import {
-    Box, Heading, HStack,
-    VStack, Text, Tag, TagLabel, Wrap, WrapItem
+    Box, Heading, HStack, Flex,
+    VStack, Text, Tag, TagLabel, Wrap, WrapItem,
+    Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton,
+    useDisclosure,
 } from "@chakra-ui/react";
 import { Fragment, useEffect, useState } from 'react';
 
@@ -49,17 +52,38 @@ export async function getStaticProps({ params }) {
 }
 
 
-export default function ArticlePage({ article, recommendedPosts }) {
-    const [isMobile, setIsMobile] = useState(false);
-    const [tocVisible, setTocVisible] = useState(false);
-    const [toc, setToc] = useState([]);
+function TocList({ toc, onItemClick }) {
+    return toc.map(item => (
+        <Box
+            key={item.id}
+            ml={(item.level - 1) * 14}
+            py="4px"
+            borderBottom="1px solid rgba(134, 107, 171, 0.08)"
+        >
+            <a
+                href={`#${item.id}`}
+                onClick={onItemClick}
+                style={{
+                    color: '#c0c0c0',
+                    textDecoration: 'none',
+                    fontSize: '0.78rem',
+                    lineHeight: 1.6,
+                    display: 'block',
+                    transition: 'color 0.2s ease',
+                }}
+                onMouseEnter={e => e.currentTarget.style.color = '#cc7bc9'}
+                onMouseLeave={e => e.currentTarget.style.color = '#c0c0c0'}
+            >
+                {item.text}
+            </a>
+        </Box>
+    ));
+}
 
-    useEffect(() => {
-        const checkScreen = () => setIsMobile(window.innerWidth < 768);
-        checkScreen();
-        window.addEventListener("resize", checkScreen);
-        return () => window.removeEventListener("resize", checkScreen);
-    }, []);
+
+export default function ArticlePage({ article, recommendedPosts }) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [toc, setToc] = useState([]);
 
     useEffect(() => {
         const div = document.createElement('div');
@@ -113,161 +137,56 @@ export default function ArticlePage({ article, recommendedPosts }) {
                 <meta property="og:url" content={`https://barbarpotato.github.io/labs/${article.slug}`} />
             </Head>
 
-            {/* ── Table of Contents (fixed left) ── */}
-            <div style={{ position: 'fixed', left: 0, top: '50%', transform: 'translateY(-50%)', zIndex: 1000 }}>
+            {/* ── Mobile FAB (bottom-right, hidden on md+) ── */}
+            <Box
+                display={{ base: "flex", md: "none" }}
+                position="fixed"
+                bottom="24px"
+                right="24px"
+                zIndex={1000}
+                w="50px"
+                h="50px"
+                borderRadius="full"
+                bg="#2a2540"
+                border="1.5px solid rgba(134, 107, 171, 0.5)"
+                alignItems="center"
+                justifyContent="center"
+                cursor="pointer"
+                onClick={onOpen}
+                boxShadow="0 4px 20px rgba(0,0,0,0.45)"
+                transition="all 0.2s ease"
+                _hover={{ bg: "#332d52", borderColor: "#cc7bc9" }}
+            >
+                <MdOutlineToc size={22} color="#cc7bc9" />
+            </Box>
 
-                {/* Desktop TOC */}
-                {!isMobile && (
-                    <div
-                        onMouseEnter={() => setTocVisible(true)}
-                        onMouseLeave={() => setTocVisible(false)}
-                        style={{
-                            backgroundColor: '#2a2540',
-                            border: '1px solid rgba(134, 107, 171, 0.3)',
-                            borderLeft: 'none',
-                            padding: tocVisible ? '16px 18px' : 0,
-                            borderTopRightRadius: 16,
-                            borderBottomRightRadius: 16,
-                            overflow: 'hidden',
-                            maxHeight: '75vh',
-                            overflowY: tocVisible ? 'auto' : 'hidden',
-                            boxShadow: '4px 0 20px rgba(0,0,0,0.35)',
-                            transition: 'width 0.3s ease, padding 0.3s ease',
-                            width: tocVisible ? '260px' : '26px',
-                            fontFamily: "'Outfit', system-ui, sans-serif",
-                        }}
+            {/* ── Mobile Drawer (right) ── */}
+            <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+                <DrawerOverlay backdropFilter="blur(4px)" />
+                <DrawerContent
+                    bg="#2a2540"
+                    maxW="280px"
+                    borderLeft="1px solid rgba(134, 107, 171, 0.2)"
+                >
+                    <DrawerCloseButton color="#866bab" mt={1} />
+                    <DrawerHeader
+                        fontFamily="'Outfit', system-ui, sans-serif"
+                        fontSize="xs"
+                        fontWeight="700"
+                        color="#866bab"
+                        letterSpacing="0.2em"
+                        textTransform="uppercase"
+                        pt={5}
+                        pb={3}
+                        borderBottom="1px solid rgba(134, 107, 171, 0.12)"
                     >
-                        {!tocVisible ? (
-                            <div style={{
-                                writingMode: 'vertical-rl',
-                                transform: 'rotate(180deg)',
-                                cursor: 'pointer',
-                                color: '#866bab',
-                                fontWeight: '700',
-                                padding: '16px 0 16px 14px',
-                                letterSpacing: '0.12em',
-                                fontSize: '0.6rem',
-                                textTransform: 'uppercase',
-                                whiteSpace: 'nowrap',
-                            }}>
-                                Table of Contents
-                            </div>
-                        ) : (
-                            <>
-                                <div style={{
-                                    color: '#866bab',
-                                    fontWeight: '700',
-                                    fontSize: '0.6rem',
-                                    letterSpacing: '0.2em',
-                                    textTransform: 'uppercase',
-                                    marginBottom: '14px',
-                                    whiteSpace: 'nowrap',
-                                }}>
-                                    Table of Contents
-                                </div>
-                                {toc.map(item => (
-                                    <div key={item.id} style={{ marginLeft: (item.level - 1) * 14, padding: '4px 0' }}>
-                                        <a
-                                            href={`#${item.id}`}
-                                            style={{
-                                                color: '#c0c0c0',
-                                                textDecoration: 'none',
-                                                fontSize: '0.78rem',
-                                                lineHeight: 1.5,
-                                                display: 'block',
-                                                transition: 'color 0.2s ease',
-                                            }}
-                                            onMouseEnter={e => e.currentTarget.style.color = '#cc7bc9'}
-                                            onMouseLeave={e => e.currentTarget.style.color = '#c0c0c0'}
-                                        >
-                                            {item.text}
-                                        </a>
-                                    </div>
-                                ))}
-                            </>
-                        )}
-                    </div>
-                )}
-
-                {/* Mobile TOC */}
-                {isMobile && (
-                    <>
-                        <button
-                            onClick={() => setTocVisible(prev => !prev)}
-                            style={{
-                                position: 'fixed',
-                                top: '50%',
-                                left: 0,
-                                transform: 'translateY(-50%)',
-                                zIndex: 1100,
-                                backgroundColor: '#2a2540',
-                                color: '#866bab',
-                                border: '1px solid rgba(134, 107, 171, 0.4)',
-                                borderLeft: 'none',
-                                borderTopRightRadius: 10,
-                                borderBottomRightRadius: 10,
-                                padding: '8px 4px',
-                                cursor: 'pointer',
-                                writingMode: 'vertical-rl',
-                                fontSize: '0.55rem',
-                                fontWeight: '700',
-                                letterSpacing: '0.1em',
-                                textTransform: 'uppercase',
-                                height: 68,
-                                width: 22,
-                                fontFamily: "'Outfit', system-ui, sans-serif",
-                            }}
-                        >
-                            TOC
-                        </button>
-
-                        {tocVisible && (
-                            <div style={{
-                                position: 'fixed',
-                                top: '50%',
-                                left: 28,
-                                transform: 'translateY(-50%)',
-                                backgroundColor: '#2a2540',
-                                border: '1px solid rgba(134, 107, 171, 0.3)',
-                                padding: '14px 18px',
-                                borderRadius: 12,
-                                maxHeight: '70vh',
-                                width: '220px',
-                                overflowY: 'auto',
-                                boxShadow: '4px 4px 20px rgba(0,0,0,0.4)',
-                                zIndex: 1099,
-                                fontFamily: "'Outfit', system-ui, sans-serif",
-                            }}>
-                                <div style={{
-                                    color: '#866bab',
-                                    fontWeight: '700',
-                                    fontSize: '0.6rem',
-                                    letterSpacing: '0.2em',
-                                    textTransform: 'uppercase',
-                                    marginBottom: '12px',
-                                }}>
-                                    Table of Contents
-                                </div>
-                                {toc.map(item => (
-                                    <div key={item.id} style={{
-                                        marginLeft: (item.level - 1) * 12,
-                                        padding: '5px 0',
-                                        borderBottom: '1px solid rgba(134, 107, 171, 0.1)',
-                                    }}>
-                                        <a
-                                            href={`#${item.id}`}
-                                            onClick={() => setTocVisible(false)}
-                                            style={{ color: '#c0c0c0', textDecoration: 'none', fontSize: '0.8rem', display: 'block' }}
-                                        >
-                                            {item.text}
-                                        </a>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </>
-                )}
-            </div>
+                        Table of Contents
+                    </DrawerHeader>
+                    <DrawerBody px={5} py={4}>
+                        <TocList toc={toc} onItemClick={onClose} />
+                    </DrawerBody>
+                </DrawerContent>
+            </Drawer>
 
             {/* ── Article ── */}
             <Box as="article" bg="#292b37" minH="100vh">
@@ -294,7 +213,7 @@ export default function ArticlePage({ article, recommendedPosts }) {
                         pointerEvents="none"
                     />
 
-                    <Box mx="auto" maxW="720px" px={{ base: 5, md: 8 }} position="relative">
+                    <Box mx="auto" maxW={{ base: "720px", md: "1060px" }} px={{ base: 5, md: 8 }} position="relative">
 
                         {/* Back button */}
                         <Box
@@ -368,12 +287,54 @@ export default function ArticlePage({ article, recommendedPosts }) {
                 </Box>
 
                 {/* ── Content body ── */}
-                <Box mx="auto" maxW="720px" px={{ base: 5, md: 8 }} py={{ base: 10, md: 14 }}>
-                    <div
-                        className="content"
-                        style={{ overflowX: 'auto' }}
-                        dangerouslySetInnerHTML={{ __html: article.description }}
-                    />
+                <Box
+                    mx="auto"
+                    maxW={{ base: "720px", md: "1060px" }}
+                    px={{ base: 5, md: 8 }}
+                    py={{ base: 10, md: 14 }}
+                >
+                    <Flex gap={10} align="flex-start">
+
+                        {/* Article content */}
+                        <Box flex="1" minW={0}>
+                            <div
+                                className="content"
+                                style={{ overflowX: 'auto' }}
+                                dangerouslySetInnerHTML={{ __html: article.description }}
+                            />
+                        </Box>
+
+                        {/* Desktop TOC sidebar (hidden on mobile) */}
+                        {toc.length > 0 && (
+                            <Box
+                                display={{ base: "none", md: "block" }}
+                                w="220px"
+                                flexShrink={0}
+                                position="sticky"
+                                top="90px"
+                                maxH="calc(100vh - 110px)"
+                                overflowY="auto"
+                                sx={{
+                                    '&::-webkit-scrollbar': { width: '4px' },
+                                    '&::-webkit-scrollbar-thumb': { background: 'rgba(134,107,171,0.3)', borderRadius: '4px' },
+                                }}
+                            >
+                                <Text
+                                    fontFamily="'Outfit', system-ui, sans-serif"
+                                    fontSize="xs"
+                                    fontWeight="700"
+                                    color="#866bab"
+                                    letterSpacing="0.2em"
+                                    textTransform="uppercase"
+                                    mb={4}
+                                >
+                                    Table of Contents
+                                </Text>
+                                <TocList toc={toc} onItemClick={undefined} />
+                            </Box>
+                        )}
+
+                    </Flex>
                 </Box>
 
                 {/* ── Recommended posts ── */}
@@ -384,7 +345,7 @@ export default function ArticlePage({ article, recommendedPosts }) {
                             borderTop="1px solid rgba(134, 107, 171, 0.12)"
                             py={{ base: 12, md: 16 }}
                         >
-                            <Box mx="auto" maxW="720px" px={{ base: 5, md: 8 }}>
+                            <Box mx="auto" maxW={{ base: "720px", md: "1060px" }} px={{ base: 5, md: 8 }}>
 
                                 {/* Section heading */}
                                 <Box mb={10}>

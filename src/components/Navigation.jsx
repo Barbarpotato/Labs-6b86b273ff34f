@@ -42,7 +42,11 @@ function Navigation() {
         onClose();
     };
 
-    const isActive = (path) => normalizePath(path) === activePath;
+    const isActive = (path) => {
+        const n = normalizePath(path);
+        if (n === "/") return activePath === "/";
+        return activePath === n || activePath.startsWith(n + "/") || activePath.startsWith(n.toLowerCase() + "/");
+    };
 
     return (
         // Single sticky wrapper — nav bar + mobile menu move together
