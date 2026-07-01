@@ -333,12 +333,13 @@ export default function ArticlePage({ article, recommendedPosts }) {
                             >
                                 <Text
                                     fontFamily="'Outfit', system-ui, sans-serif"
-                                    fontSize="9px"
+                                    fontSize="16px"
                                     fontWeight="700"
                                     color="#866bab"
                                     letterSpacing="0.22em"
                                     textTransform="uppercase"
                                     mb={3}
+                                    mt={6}
                                 >
                                     Daftar Isi
                                 </Text>
