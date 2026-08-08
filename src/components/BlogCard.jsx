@@ -13,14 +13,14 @@ const BlogCard = ({ article }) => {
     return (
         <Box
             w="100%"
-            bg="#383a4a"
+            bg="#ffffff"
             borderRadius="xl"
-            border="1px solid rgba(134, 107, 171, 0.2)"
+            border="1px solid rgba(0, 0, 0, 0.15)"
             p={6}
             className="project-card"
             _hover={{
-                boxShadow: '0px 0px 25px rgba(204, 123, 201, 0.25)',
-                borderColor: 'rgba(204, 123, 201, 0.4)',
+                boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.25)',
+                borderColor: 'rgba(0, 0, 0, 0.4)',
             }}
             transition="all 0.2s ease"
         >
@@ -28,8 +28,8 @@ const BlogCard = ({ article }) => {
                 {article.categories.map((category) => (
                     <Badge
                         key={category}
-                        bg="rgba(134, 107, 171, 0.15)"
-                        color="#866bab"
+                        bg="rgba(0, 0, 0, 0.08)"
+                        color="#000000"
                         borderRadius="full"
                         px={2.5}
                         py={0.5}
@@ -45,10 +45,10 @@ const BlogCard = ({ article }) => {
 
             <Heading
                 as="h3"
-                fontFamily="'Playfair Display', Georgia, serif"
+                fontFamily="'Space Grotesk', system-ui, sans-serif"
                 fontWeight="700"
                 fontSize="xl"
-                color="#faf9ff"
+                color="#000000"
                 mb={2}
                 noOfLines={2}
                 lineHeight="1.3"
@@ -59,15 +59,15 @@ const BlogCard = ({ article }) => {
             </Heading>
 
             <Flex align="center" gap={1.5} mb={4}>
-                <FaCalendarAlt size={12} style={{ color: '#866bab', flexShrink: 0 }} />
-                <Text fontFamily="'Outfit', system-ui, sans-serif" fontSize="xs" color="#c0c0c0">
+                <FaCalendarAlt size={12} style={{ color: '#000000', flexShrink: 0 }} />
+                <Text fontFamily="'Outfit', system-ui, sans-serif" fontSize="xs" color="#666666">
                     {formatDate(article.date)}
                 </Text>
             </Flex>
 
             <Text
                 fontFamily="'Outfit', system-ui, sans-serif"
-                color="#d0d0d0"
+                color="#666666"
                 fontSize="sm"
                 lineHeight="1.7"
                 noOfLines={3}
@@ -85,10 +85,10 @@ const BlogCard = ({ article }) => {
                 fontFamily="'Outfit', system-ui, sans-serif"
                 fontWeight="500"
                 fontSize="sm"
-                color="#866bab"
+                color="#000000"
                 borderBottom="1px solid"
-                borderColor="#866bab"
-                _hover={{ color: '#cc7bc9', borderColor: '#cc7bc9' }}
+                borderColor="#000000"
+                _hover={{ opacity: 0.6 }}
                 transition="all 0.2s ease"
                 style={{ textDecoration: 'none' }}
             >

@@ -62,24 +62,24 @@ function TocList({ toc, onItemClick }) {
                     href={`#${item.id}`}
                     onClick={onItemClick}
                     style={{
-                        color: '#c0c0c0',
+                        color: '#666666',
                         textDecoration: 'none',
                         fontSize: '0.78rem',
                         lineHeight: 1.6,
                         display: 'flex',
                         alignItems: 'flex-start',
                         gap: '7px',
-                        transition: 'color 0.2s ease',
+                        transition: 'opacity 0.2s ease',
                     }}
-                    onMouseEnter={e => e.currentTarget.style.color = '#cc7bc9'}
-                    onMouseLeave={e => e.currentTarget.style.color = '#c0c0c0'}
+                    onMouseEnter={e => e.currentTarget.style.opacity = '0.6'}
+                    onMouseLeave={e => e.currentTarget.style.opacity = '1'}
                 >
                     <span style={{
                         display: 'inline-block',
                         width: isTop ? '5px' : '3px',
                         height: isTop ? '5px' : '3px',
                         borderRadius: '50%',
-                        background: isTop ? '#866bab' : 'rgba(134,107,171,0.45)',
+                        background: isTop ? '#000000' : 'rgba(0,0,0,0.45)',
                         flexShrink: 0,
                         marginTop: '6px',
                     }} />
@@ -138,7 +138,7 @@ export default function ArticlePage({ article, recommendedPosts }) {
     return (
         <>
             <Head>
-                <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/personal-blog-darmajr.appspot.com/o/portofolio%2Fadmin%2FAvatar.svg?alt=media&token=622405c3-9dff-4483-af0c-ddc95fbe6445" />
+                <link rel="icon" href="/Avatar.ico" />
                 <title>{article.title}</title>
                 <meta name="description" content={article.short_description} />
                 <meta property="og:title" content={article.title} />
@@ -157,38 +157,38 @@ export default function ArticlePage({ article, recommendedPosts }) {
                 w="50px"
                 h="50px"
                 borderRadius="full"
-                bg="#2a2540"
-                border="1.5px solid rgba(134, 107, 171, 0.5)"
+                bg="#ffffff"
+                border="1.5px solid rgba(0, 0, 0, 0.5)"
                 alignItems="center"
                 justifyContent="center"
                 cursor="pointer"
                 onClick={onOpen}
-                boxShadow="0 4px 20px rgba(0,0,0,0.45)"
+                boxShadow="0 4px 20px rgba(0,0,0,0.25)"
                 transition="all 0.2s ease"
-                _hover={{ bg: "#332d52", borderColor: "#cc7bc9" }}
+                _hover={{ bg: "rgba(0, 0, 0, 0.08)", borderColor: "#000000" }}
             >
-                <FiList size={20} color="#cc7bc9" />
+                <FiList size={20} color="#000000" />
             </Box>
 
             {/* ── Mobile Drawer (right) ── */}
             <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
                 <DrawerOverlay backdropFilter="blur(4px)" />
                 <DrawerContent
-                    bg="#2a2540"
+                    bg="#ffffff"
                     maxW="280px"
-                    borderLeft="1px solid rgba(134, 107, 171, 0.2)"
+                    borderLeft="1px solid rgba(0, 0, 0, 0.2)"
                 >
-                    <DrawerCloseButton color="#866bab" mt={1} />
+                    <DrawerCloseButton color="#000000" mt={1} />
                     <DrawerHeader
                         fontFamily="'Outfit', system-ui, sans-serif"
                         fontSize="xs"
                         fontWeight="700"
-                        color="#866bab"
+                        color="#000000"
                         letterSpacing="0.2em"
                         textTransform="uppercase"
                         pt={5}
                         pb={3}
-                        borderBottom="1px solid rgba(134, 107, 171, 0.12)"
+                        borderBottom="1px solid rgba(0, 0, 0, 0.12)"
                     >
                         Daftar Isi
                     </DrawerHeader>
@@ -199,7 +199,7 @@ export default function ArticlePage({ article, recommendedPosts }) {
             </Drawer>
 
             {/* ── Article ── */}
-            <Box as="article" bg="#292b37" minH="100vh">
+            <Box as="article" bg="#ffffff" minH="100vh">
 
                 {/* ── Hero ── */}
                 <Box
@@ -207,7 +207,7 @@ export default function ArticlePage({ article, recommendedPosts }) {
                     overflow="hidden"
                     pt={{ base: 10, md: 16 }}
                     pb={{ base: 8, md: 12 }}
-                    borderBottom="1px solid rgba(134, 107, 171, 0.12)"
+                    borderBottom="1px solid rgba(0, 0, 0, 0.12)"
                 >
                     {/* Ambient glow decoration */}
                     <Box
@@ -218,7 +218,7 @@ export default function ArticlePage({ article, recommendedPosts }) {
                         w="700px"
                         h="320px"
                         borderRadius="full"
-                        bg="rgba(134, 107, 171, 0.05)"
+                        bg="rgba(0, 0, 0, 0.04)"
                         filter="blur(80px)"
                         pointerEvents="none"
                     />
@@ -233,12 +233,12 @@ export default function ArticlePage({ article, recommendedPosts }) {
                             alignItems="center"
                             gap={2}
                             mb={10}
-                            color="#866bab"
+                            color="#000000"
                             fontFamily="'Outfit', system-ui, sans-serif"
                             fontSize="sm"
                             fontWeight="500"
-                            transition="color 0.2s ease"
-                            _hover={{ color: "#cc7bc9" }}
+                            transition="opacity 0.2s ease"
+                            _hover={{ opacity: 0.6 }}
                             bg="transparent"
                             border="none"
                             cursor="pointer"
@@ -255,9 +255,9 @@ export default function ArticlePage({ article, recommendedPosts }) {
                                     <Tag
                                         size="sm"
                                         borderRadius="full"
-                                        bg="rgba(134, 107, 171, 0.1)"
-                                        border="1px solid rgba(134, 107, 171, 0.4)"
-                                        color="#866bab"
+                                        bg="rgba(0, 0, 0, 0.06)"
+                                        border="1px solid rgba(0, 0, 0, 0.4)"
+                                        color="#000000"
                                         fontFamily="'Outfit', system-ui, sans-serif"
                                         fontWeight="500"
                                         px={3}
@@ -271,10 +271,10 @@ export default function ArticlePage({ article, recommendedPosts }) {
 
                         {/* Title */}
                         <Heading
-                            fontFamily="'Playfair Display', Georgia, serif"
-                            fontWeight="800"
+                            fontFamily="'Space Grotesk', system-ui, sans-serif"
+                            fontWeight="700"
                             fontSize={{ base: "2xl", md: "4xl", lg: "5xl" }}
-                            color="#faf9ff"
+                            color="#000000"
                             lineHeight="1.2"
                             letterSpacing="-0.01em"
                             mb={6}
@@ -284,11 +284,11 @@ export default function ArticlePage({ article, recommendedPosts }) {
 
                         {/* Date */}
                         <HStack spacing={2}>
-                            <AiOutlineCalendar size={15} style={{ color: '#866bab', flexShrink: 0 }} />
+                            <AiOutlineCalendar size={15} style={{ color: '#000000', flexShrink: 0 }} />
                             <Text
                                 fontFamily="'Outfit', system-ui, sans-serif"
                                 fontSize="sm"
-                                color="#c0c0c0"
+                                color="#666666"
                             >
                                 {article.timestamp}
                             </Text>
@@ -325,17 +325,17 @@ export default function ArticlePage({ article, recommendedPosts }) {
                                 maxH="calc(100vh - 110px)"
                                 overflowY="auto"
                                 pl={5}
-                                borderLeft="1px solid rgba(134, 107, 171, 0.18)"
+                                borderLeft="1px solid rgba(0, 0, 0, 0.18)"
                                 sx={{
                                     '&::-webkit-scrollbar': { width: '3px' },
-                                    '&::-webkit-scrollbar-thumb': { background: 'rgba(134,107,171,0.25)', borderRadius: '4px' },
+                                    '&::-webkit-scrollbar-thumb': { background: 'rgba(0,0,0,0.25)', borderRadius: '4px' },
                                 }}
                             >
                                 <Text
                                     fontFamily="'Outfit', system-ui, sans-serif"
                                     fontSize="16px"
                                     fontWeight="700"
-                                    color="#866bab"
+                                    color="#000000"
                                     letterSpacing="0.22em"
                                     textTransform="uppercase"
                                     mb={3}
@@ -354,8 +354,8 @@ export default function ArticlePage({ article, recommendedPosts }) {
                 {recommendedPosts.length > 0 && (
                     <Fragment>
                         <Box
-                            bg="rgba(56, 58, 74, 0.35)"
-                            borderTop="1px solid rgba(134, 107, 171, 0.12)"
+                            bg="#ffffff"
+                            borderTop="1px solid rgba(0, 0, 0, 0.12)"
                             py={{ base: 12, md: 16 }}
                         >
                             <Box mx="auto" maxW={{ base: "720px", md: "1060px" }} px={{ base: 5, md: 8 }}>
@@ -363,11 +363,10 @@ export default function ArticlePage({ article, recommendedPosts }) {
                                 {/* Section heading */}
                                 <Box mb={10}>
                                     <Heading
-                                        fontFamily="'Playfair Display', Georgia, serif"
-                                        fontWeight="800"
-                                        fontStyle="italic"
+                                        fontFamily="'Space Grotesk', system-ui, sans-serif"
+                                        fontWeight="700"
                                         fontSize={{ base: "2xl", md: "3xl" }}
-                                        color="#faf9ff"
+                                        color="#000000"
                                         display="inline-block"
                                     >
                                         Artikel{" "}
@@ -387,7 +386,7 @@ export default function ArticlePage({ article, recommendedPosts }) {
                                                 <path
                                                     d="M 4,7 C 50,1 150,1 196,7"
                                                     fill="none"
-                                                    stroke="#cc7bc9"
+                                                    stroke="#000000"
                                                     strokeWidth="3.5"
                                                     strokeLinecap="round"
                                                 />

@@ -76,7 +76,7 @@ const Footer = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <Box as="footer" bg="#1e1f2b" position="relative" overflow="hidden">
+        <Box as="footer" bg="#ffffff" borderTop="1px solid rgba(0, 0, 0, 0.15)" position="relative" overflow="hidden">
             {/* ── Main footer columns ── */}
             <Container maxW="7xl" position="relative" zIndex={1}>
                 <Grid
@@ -86,7 +86,7 @@ const Footer = () => {
                     }}
                     gap={{ base: 12, md: 16 }}
                     py={{ base: 14, md: 16 }}
-                    borderBottom="1px solid rgba(134, 107, 171, 0.12)"
+                    borderBottom="1px solid rgba(0, 0, 0, 0.12)"
                 >
                     {/* Brand column */}
                     <Box>
@@ -96,7 +96,7 @@ const Footer = () => {
                                 fontFamily="'Space Grotesk', system-ui, sans-serif"
                                 fontWeight="900"
                                 fontSize="2xl"
-                                color="#faf9ff"
+                                color="#000000"
                                 letterSpacing="-0.03em"
                                 lineHeight="1"
                             >
@@ -106,7 +106,7 @@ const Footer = () => {
                                 fontFamily="'Space Grotesk', system-ui, sans-serif"
                                 fontWeight="900"
                                 fontSize="2xl"
-                                color="#cc7bc9"
+                                color="#000000"
                                 letterSpacing="-0.03em"
                                 lineHeight="1"
                             >
@@ -116,7 +116,7 @@ const Footer = () => {
                                 w="5px"
                                 h="5px"
                                 borderRadius="full"
-                                bg="#866bab"
+                                bg="#000000"
                                 ml="2px"
                                 mb="3px"
                             />
@@ -125,14 +125,14 @@ const Footer = () => {
                         <Box
                             w="36px"
                             h="2px"
-                            bg="#866bab"
+                            bg="#000000"
                             borderRadius="full"
                             mb={5}
                         />
 
                         <Text
                             fontFamily="'Outfit', system-ui, sans-serif"
-                            color="#c0c0c0"
+                            color="#666666"
                             fontSize="md"
                             lineHeight="1.85"
                             maxW="300px"
@@ -159,12 +159,11 @@ const Footer = () => {
                                     w="36px"
                                     h="36px"
                                     borderRadius="full"
-                                    border="1px solid rgba(134, 107, 171, 0.35)"
-                                    color="#866bab"
+                                    border="1px solid rgba(0, 0, 0, 0.35)"
+                                    color="#000000"
                                     _hover={{
-                                        color: "#cc7bc9",
-                                        borderColor: "#cc7bc9",
-                                        bg: "rgba(204, 123, 201, 0.08)",
+                                        borderColor: "#000000",
+                                        bg: "rgba(0, 0, 0, 0.08)",
                                     }}
                                     transition="all 0.25s ease"
                                 >
@@ -182,7 +181,7 @@ const Footer = () => {
                             fontSize="10px"
                             letterSpacing="0.22em"
                             textTransform="uppercase"
-                            color="#866bab"
+                            color="#000000"
                             mb={6}
                         >
                             Navigasi
@@ -193,10 +192,10 @@ const Footer = () => {
                                     key={label}
                                     href={href}
                                     fontFamily="'Outfit', system-ui, sans-serif"
-                                    color="#c0c0c0"
+                                    color="#666666"
                                     fontSize="md"
                                     fontWeight="400"
-                                    _hover={{ color: "#faf9ff" }}
+                                    _hover={{ color: "#000000" }}
                                     transition="color 0.2s ease"
                                 >
                                     {label}
@@ -213,7 +212,7 @@ const Footer = () => {
                             fontSize="10px"
                             letterSpacing="0.22em"
                             textTransform="uppercase"
-                            color="#866bab"
+                            color="#000000"
                             mb={6}
                         >
                             Terhubung
@@ -229,10 +228,10 @@ const Footer = () => {
                                     alignItems="center"
                                     gap={1.5}
                                     fontFamily="'Outfit', system-ui, sans-serif"
-                                    color="#c0c0c0"
+                                    color="#666666"
                                     fontSize="md"
                                     fontWeight="400"
-                                    _hover={{ color: "#faf9ff" }}
+                                    _hover={{ color: "#000000" }}
                                     transition="color 0.2s ease"
                                 >
                                     {label}
@@ -254,14 +253,14 @@ const Footer = () => {
                     <Text
                         fontFamily="'Outfit', system-ui, sans-serif"
                         fontSize="sm"
-                        color="rgba(134, 107, 171, 0.45)"
+                        color="rgba(0, 0, 0, 0.45)"
                     >
                         © {currentYear} Barbarpotato. All rights reserved.
                     </Text>
                     <Text
                         fontFamily="'Outfit', system-ui, sans-serif"
                         fontSize="sm"
-                        color="rgba(134, 107, 171, 0.45)"
+                        color="rgba(0, 0, 0, 0.45)"
                     >
                     </Text>
                 </Flex>

@@ -56,13 +56,13 @@ function Navigation() {
                 justify="space-between"
                 bg={
                     scrolled
-                        ? "rgba(41, 43, 55, 0.88)"
-                        : "rgba(41, 43, 55, 0.6)"
+                        ? "rgba(255, 255, 255, 0.95)"
+                        : "rgba(255, 255, 255, 0.6)"
                 }
                 backdropFilter="blur(16px)"
                 borderBottom={
                     scrolled
-                        ? "1px solid rgba(134, 107, 171, 0.22)"
+                        ? "1px solid rgba(0, 0, 0, 0.22)"
                         : "1px solid transparent"
                 }
                 transition="background 0.3s ease, border-color 0.3s ease"
@@ -83,7 +83,7 @@ function Navigation() {
                         fontFamily="'Space Grotesk', system-ui, sans-serif"
                         fontWeight="900"
                         fontSize="xl"
-                        color="#faf9ff"
+                        color="#000000"
                         letterSpacing="-0.03em"
                         lineHeight="1"
                     >
@@ -93,7 +93,7 @@ function Navigation() {
                         fontFamily="'Space Grotesk', system-ui, sans-serif"
                         fontWeight="900"
                         fontSize="xl"
-                        color="#cc7bc9"
+                        color="#000000"
                         letterSpacing="-0.03em"
                         lineHeight="1"
                     >
@@ -103,7 +103,7 @@ function Navigation() {
                         w="5px"
                         h="5px"
                         borderRadius="full"
-                        bg="#866bab"
+                        bg="#000000"
                         ml="2px"
                         mb="2px"
                         alignSelf="flex-end"
@@ -129,7 +129,7 @@ function Navigation() {
                             >
                                 <Text
                                     fontFamily="'Outfit', system-ui, sans-serif"
-                                    color={active ? "#cc7bc9" : "#faf9ff"}
+                                    color="#000000"
                                     fontSize="sm"
                                     fontWeight={active ? "700" : "500"}
                                     px={4}
@@ -138,8 +138,7 @@ function Navigation() {
                                     letterSpacing="0.01em"
                                     transition="all 0.25s ease"
                                     _hover={{
-                                        bg: "rgba(134, 107, 171, 0.14)",
-                                        color: "#cc7bc9",
+                                        bg: "rgba(0, 0, 0, 0.1)",
                                     }}
                                 >
                                     {label}
@@ -152,7 +151,7 @@ function Navigation() {
                                         transform="translateX(-50%)"
                                         w="16px"
                                         h="2.5px"
-                                        bg="#cc7bc9"
+                                        bg="#000000"
                                         borderRadius="full"
                                     />
                                 )}
@@ -175,16 +174,16 @@ function Navigation() {
                         px={5}
                         py={2}
                         borderRadius="full"
-                        border="1.5px solid rgba(134, 107, 171, 0.6)"
+                        border="1.5px solid rgba(0, 0, 0, 0.6)"
                         fontFamily="'Outfit', system-ui, sans-serif"
                         fontWeight="600"
                         fontSize="sm"
-                        color="#866bab"
+                        color="#000000"
                         transition="all 0.25s ease"
                         _hover={{
-                            bg: "#866bab",
-                            color: "#faf9ff",
-                            borderColor: "#866bab",
+                            bg: "#000000",
+                            color: "#ffffff",
+                            borderColor: "#000000",
                         }}
                     >
                         Hubungi
@@ -202,10 +201,10 @@ function Navigation() {
                             )
                         }
                         variant="ghost"
-                        color="#faf9ff"
+                        color="#000000"
                         onClick={onToggle}
                         aria-label="Toggle menu"
-                        _hover={{ bg: "rgba(134, 107, 171, 0.15)" }}
+                        _hover={{ bg: "rgba(0, 0, 0, 0.1)" }}
                         transition="all 0.2s ease"
                     />
                 </HStack>
@@ -223,9 +222,9 @@ function Navigation() {
                         style={{ display: "block" }}
                     >
                         <Box
-                            bg="rgba(41, 43, 55, 0.95)"
+                            bg="rgba(255, 255, 255, 0.95)"
                             backdropFilter="blur(16px)"
-                            borderBottom="1px solid rgba(134, 107, 171, 0.18)"
+                            borderBottom="1px solid rgba(0, 0, 0, 0.18)"
                             display={{ lg: "none" }}
                             px={4}
                             pt={3}
@@ -244,11 +243,11 @@ function Navigation() {
                                             borderRadius="xl"
                                             bg={
                                                 active
-                                                    ? "rgba(204, 123, 201, 0.1)"
+                                                    ? "rgba(0, 0, 0, 0.1)"
                                                     : "transparent"
                                             }
                                             _hover={{
-                                                bg: "rgba(134, 107, 171, 0.1)",
+                                                bg: "rgba(0, 0, 0, 0.08)",
                                             }}
                                             transition="background 0.18s ease"
                                             display="flex"
@@ -260,7 +259,7 @@ function Navigation() {
                                                     w="5px"
                                                     h="5px"
                                                     borderRadius="full"
-                                                    bg="#cc7bc9"
+                                                    bg="#000000"
                                                     flexShrink={0}
                                                 />
                                             ) : (
@@ -272,11 +271,7 @@ function Navigation() {
                                                 fontWeight={
                                                     active ? "700" : "500"
                                                 }
-                                                color={
-                                                    active
-                                                        ? "#cc7bc9"
-                                                        : "#faf9ff"
-                                                }
+                                                color="#000000"
                                             >
                                                 {label}
                                             </Text>
@@ -287,7 +282,7 @@ function Navigation() {
                                 {/* Divider */}
                                 <Box
                                     h="1px"
-                                    bg="rgba(134, 107, 171, 0.12)"
+                                    bg="rgba(0, 0, 0, 0.12)"
                                     mx={4}
                                     my={1}
                                 />
@@ -308,9 +303,9 @@ function Navigation() {
                                     fontFamily="'Outfit', system-ui, sans-serif"
                                     fontWeight="600"
                                     fontSize="md"
-                                    color="#866bab"
+                                    color="#000000"
                                     _hover={{
-                                        bg: "rgba(134, 107, 171, 0.1)",
+                                        bg: "rgba(0, 0, 0, 0.08)",
                                         textDecoration: "none",
                                     }}
                                     transition="background 0.18s ease"
